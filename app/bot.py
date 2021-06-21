@@ -17,9 +17,10 @@ class Bot(commands.Bot):
             case_insensitive=True,
         )
 
+        print(self)
         self._skip_check = lambda x, y: False
         self.remove_command('help')
-        print(self)
+        self.load_extensions()
 
     def __repr__(self):
         return '\n'.join(
@@ -32,6 +33,15 @@ class Bot(commands.Bot):
                 r"╚═════╝  ╚═════╝     ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝    ╚═════╝  ╚═════╝    ╚═╝"
             )
         )
+
+    def load_extensions(self):
+        for filename in os.listdir("app/components"):
+            if not filename.endswith("py"):
+                continue
+
+            print('- loading', filename, end='\r')
+            self.load_extension(f"app.components.{filename[:-3]}")
+            print('- loaded', filename, end='\r')
 
     def run(self):
         time("start")
@@ -47,11 +57,6 @@ class Bot(commands.Bot):
     async def on_connect(self):
         connect_time = time("start", keep=True)
         self.log(f'Logged in as {self.user} after {connect_time:,.3f}s')
-
-        for filename in os.listdir("app/components"):
-            if filename.endswith("py"):
-                self.load_extension(f"app.components.{filename[:-3]}")
-                print('-', filename)
 
     async def on_ready(self):
         ready_time = time("start", keep=True)
