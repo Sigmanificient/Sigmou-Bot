@@ -1,8 +1,8 @@
 from datetime import datetime
-import time
 
 import dotenv
 from discord.ext import commands
+from app.timer import time
 
 
 class Bot(commands.Bot):
@@ -11,6 +11,8 @@ class Bot(commands.Bot):
         super().__init__(command_prefix, **options)
 
     def run(self):
+        time("start")
+
         print(
             '\n'.join((
                 r"   ______ ____      ______        __ ",
@@ -31,10 +33,12 @@ class Bot(commands.Bot):
         return dotenv.dotenv_values(".env")['TOKEN']
 
     async def on_connect(self):
-        self.log(f'Logged in as {self.user} after {time.perf_counter():,.3f}s')
+        connect_time = time("start", keep=True)
+        self.log(f'Logged in as {self.user} after {connect_time:,.3f}s')
 
     async def on_ready(self):
-        self.log(f'Ready after {time.perf_counter():,.3f}s')
+        ready_time = time("start", keep=True)
+        self.log(f'Ready after {ready_time:,.3f}s')
 
     @staticmethod
     def log(*args):
