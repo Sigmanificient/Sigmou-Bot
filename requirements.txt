@@ -1,0 +1,2 @@
+python-dotenv ~= 0.18.0
+discord.py ~= 1.7.2
