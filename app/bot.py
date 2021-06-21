@@ -39,9 +39,11 @@ class Bot(commands.Bot):
             if not filename.endswith("py"):
                 continue
 
-            print('- loading', filename, end='\r')
-            self.load_extension(f"app.components.{filename[:-3]}")
-            print('- loaded', filename, end='\r')
+            component_name = filename[:-3]
+
+            print(f'..loading {component_name}', end='\r')
+            self.load_extension(f"app.components.{component_name}")
+            print(f'-> loaded {component_name}', end='\r')
 
     def run(self):
         time("start")
@@ -63,5 +65,8 @@ class Bot(commands.Bot):
         self.log(f'Ready after {ready_time:,.3f}s')
 
     @staticmethod
-    def log(*args):
-        print(f"[{datetime.now():%d/%b/%Y:%Hh %Mm %Ss}]", *args)
+    def log(message, temp=False):
+        if temp:
+            print(message.ljust(80, ' ', end='\r'))
+        else:
+            print(f"[{datetime.now():%d/%b/%Y:%Hh %Mm %Ss}]", message)
