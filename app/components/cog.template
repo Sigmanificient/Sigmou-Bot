@@ -1,0 +1,23 @@
+from discord.ext import commands
+
+
+class TemplateCog(commands.Cog):
+    """A simple commands cog template."""
+
+    def __init__(self, client):
+        """Link to bot instance."""
+        self.client = client
+
+    @commands.command(
+        name="sample",
+        description="the description of the sample command",
+        aliases=('ex', 's'),
+        brief="the sample"
+    )
+    async def sample_command(self, ctx):
+        """A sample command."""
+        await ctx.send("sample")
+
+
+def setup(client):
+    client.add_cog(TemplateCog(client))

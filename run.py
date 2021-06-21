@@ -1,4 +1,5 @@
-from app.bot import main
+from app.bot import Bot
 
 if __name__ == '__main__':
-    main()
+    bot = Bot(prefix='&')
+    bot.run()

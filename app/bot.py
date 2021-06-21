@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 import discord
@@ -9,14 +10,16 @@ from app.timer import time
 
 class Bot(commands.Bot):
 
-    def __init__(self, command_prefix):
-        print(self)
-
+    def __init__(self, prefix):
         super(Bot, self).__init__(
-            command_prefix=command_prefix,
+            command_prefix=prefix,
             intents=discord.Intents.default(),
             case_insensitive=True,
         )
+
+        self._skip_check = lambda x, y: False
+        self.remove_command('help')
+        print(self)
 
     def __repr__(self):
         return '\n'.join(
@@ -39,11 +42,16 @@ class Bot(commands.Bot):
         if self.is_ready():
             return
 
-        return dotenv.dotenv_values(".env")['TOKEN']
+        return dotenv.dotenv_values(".env").get('TOKEN')
 
     async def on_connect(self):
         connect_time = time("start", keep=True)
         self.log(f'Logged in as {self.user} after {connect_time:,.3f}s')
+
+        for filename in os.listdir("app/components"):
+            if filename.endswith("py"):
+                self.load_extension(f"app.components.{filename[:-3]}")
+                print('-', filename)
 
     async def on_ready(self):
         ready_time = time("start", keep=True)
@@ -52,8 +60,3 @@ class Bot(commands.Bot):
     @staticmethod
     def log(*args):
         print(f"[{datetime.now():%d/%b/%Y:%Hh %Mm %Ss}]", *args)
-
-
-def main():
-    bot = Bot('>')
-    bot.run()
