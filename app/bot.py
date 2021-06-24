@@ -1,11 +1,18 @@
+from typing import NoReturn
+
+import colorama
+from termcolor import colored
+
 import os
 from datetime import datetime
 
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 import dotenv
 from app.timer import time
+
+colorama.init()
 
 
 class Bot(commands.Bot):
@@ -23,15 +30,17 @@ class Bot(commands.Bot):
         self.load_extensions()
 
     def __repr__(self):
-        return '\n'.join(
-            (
-                r"██████╗  ██████╗     ██████╗  █████╗ ██╗   ██╗███████╗    ██████╗  ██████╗ ████████╗",
-                r"╚════██╗██╔═████╗    ██╔══██╗██╔══██╗╚██╗ ██╔╝██╔════╝    ██╔══██╗██╔═══██╗╚══██╔══╝",
-                r" █████╔╝██║██╔██║    ██║  ██║███████║ ╚████╔╝ ███████╗    ██████╔╝██║   ██║   ██║",
-                r" ╚═══██╗████╔╝██║    ██║  ██║██╔══██║  ╚██╔╝  ╚════██║    ██╔══██╗██║   ██║   ██║",
-                r"██████╔╝╚██████╔╝    ██████╔╝██║  ██║   ██║   ███████║    ██████╔╝╚██████╔╝   ██║",
-                r"╚═════╝  ╚═════╝     ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝    ╚═════╝  ╚═════╝    ╚═╝"
-            )
+        return colored(
+            '\n'.join(
+                (
+                    r"██████╗  ██████╗     ██████╗  █████╗ ██╗   ██╗███████╗    ██████╗  ██████╗ ████████╗",
+                    r"╚════██╗██╔═████╗    ██╔══██╗██╔══██╗╚██╗ ██╔╝██╔════╝    ██╔══██╗██╔═══██╗╚══██╔══╝",
+                    r" █████╔╝██║██╔██║    ██║  ██║███████║ ╚████╔╝ ███████╗    ██████╔╝██║   ██║   ██║",
+                    r" ╚═══██╗████╔╝██║    ██║  ██║██╔══██║  ╚██╔╝  ╚════██║    ██╔══██╗██║   ██║   ██║",
+                    r"██████╔╝╚██████╔╝    ██████╔╝██║  ██║   ██║   ███████║    ██████╔╝╚██████╔╝   ██║",
+                    r"╚═════╝  ╚═════╝     ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝    ╚═════╝  ╚═════╝    ╚═╝"
+                )
+            ), color='blue'
         )
 
     def load_extensions(self):
@@ -41,9 +50,9 @@ class Bot(commands.Bot):
 
             component_name = filename[:-3]
 
-            print(f'..loading {component_name}', end='\r')
+            self.log(f"loading {component_name}", temp=True)
             self.load_extension(f"app.components.{component_name}")
-            print(f'-> loaded {component_name}', end='\r')
+            self.log(f"loaded {component_name}", temp=True)
 
     def run(self):
         time("start")
@@ -56,17 +65,34 @@ class Bot(commands.Bot):
 
         return dotenv.dotenv_values(".env").get('TOKEN')
 
+    @tasks.loop(seconds=30)
+    async def update_latency(self):
+        await self.change_presence(
+            activity=discord.Activity(
+                type=discord.ActivityType.watching,
+                name=f"{self.command_prefix}help | {self.latency * 1000:,.3f} ms"
+            )
+        )
+
     async def on_connect(self):
         connect_time = time("start", keep=True)
         self.log(f'Logged in as {self.user} after {connect_time:,.3f}s')
+        self.update_latency.start()
 
     async def on_ready(self):
         ready_time = time("start", keep=True)
         self.log(f'Ready after {ready_time:,.3f}s')
 
     @staticmethod
-    def log(message, temp=False):
+    def log(message: str, color: str = 'green', temp=False) -> NoReturn:
         if temp:
-            print(message.ljust(80, ' ', end='\r'))
-        else:
-            print(f"[{datetime.now():%d/%b/%Y:%Hh %Mm %Ss}]", message)
+            print(
+                colored('->', color='magenta'),
+                colored(message.ljust(80, ' '), color=color), end='\r'
+            )
+            return
+
+        print(
+            colored(f"[{datetime.now():%d/%b/%Y:%Hh %Mm %Ss}]", color='blue'),
+            colored(message, color=color)
+        )
