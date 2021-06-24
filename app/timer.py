@@ -1,15 +1,17 @@
 import random
 from time import perf_counter, sleep
+from typing import Dict, Optional, Union, List
 
-keys = {}
+keys: Dict[Union[int, str]: float] = {}
 
 
-def time(key=None, keep=False):
+def time(key: Optional[Union[int, str]] = None, keep: Optional[bool] = False) -> Union[float, int, str]:
+    """Store a time marker link to a key then return time elapsed from key point."""
     if key is None:
-        key = hash(random.random())
+        key: int = hash(random.random())
 
     if key in keys:
-        t_key = keys.pop(key) if not keep else keys[key]
+        t_key: float = keys.pop(key) if not keep else keys[key]
         return perf_counter() - t_key
 
     keys[key] = perf_counter()
@@ -17,13 +19,13 @@ def time(key=None, keep=False):
 
 
 def tests():
-    chronos = [time() for _ in range(1_000_000)]
-
+    """Checking Timer Performance and Validating."""
+    chronos: List[int] = [time() for _ in range(1_000_000)]
     print(len([x for x in chronos if '.' not in str(x)]), 'valid chronometers')
 
     sleep(1)
 
-    times = [time(key) for key in chronos]
+    times: List[float] = [time(key) for key in chronos]
     print('first:', times[-1])
     print('last:', times[0])
     print('diff:', abs(times[0] - times[-1]))
