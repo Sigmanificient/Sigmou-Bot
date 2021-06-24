@@ -2,7 +2,7 @@ import random
 from time import perf_counter, sleep
 from typing import Dict, Optional, Union, List
 
-keys: Dict[Union[int, str]: float] = {}
+keys: Dict[Union[int, str], float] = {}
 
 
 def time(key: Optional[Union[int, str]] = None, keep: Optional[bool] = False) -> Union[float, int, str]:
