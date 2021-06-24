@@ -3,10 +3,10 @@ import os
 
 from datetime import datetime
 from termcolor import colored
-from typing import NoReturn
+from typing import NoReturn, List
 
-MAX_LOG_SIZE = 8 * 1024 * 1024
-LOGS_DIR = './app/logs/'
+MAX_LOG_SIZE: int = 8 * 1024 * 1024
+LOGS_DIR: str = './app/logs/'
 
 
 class Logger:
@@ -14,16 +14,16 @@ class Logger:
     def __init__(self):
         colorama.init()
 
-        log_files = os.listdir(LOGS_DIR)
+        log_files: List[str] = os.listdir(LOGS_DIR)
         self._actual_log_file_path = sorted(log_files)[-1] if log_files else self.new_file
 
     @property
-    def new_file(self):
+    def new_file(self) -> str:
         return f'{datetime.now():%Y%b%d-%H%M%S}.log'
 
     @property
-    def log_file_path(self):
-        file_path = f'{LOGS_DIR}{self._actual_log_file_path}'
+    def log_file_path(self) -> str:
+        file_path: str = f'{LOGS_DIR}{self._actual_log_file_path}'
 
         if not os.path.exists(file_path):
             return file_path
@@ -41,7 +41,7 @@ class Logger:
             )
             return
 
-        date = f"[{datetime.now():%d/%b/%Y:%Hh %Mm %Ss}]"
+        date: str = f"[{datetime.now():%d/%b/%Y:%Hh %Mm %Ss}]"
         print(colored(date, color='blue'), colored(message, color=color))
 
         with open(self.log_file_path, 'a+') as f:
