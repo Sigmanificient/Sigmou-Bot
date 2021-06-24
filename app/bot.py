@@ -75,3 +75,6 @@ class Bot(commands.Bot):
     async def on_ready(self):
         ready_time: float = time("start", keep=True)
         self.log(f'Ready after {ready_time:,.3f}s')
+
+    async def on_command_completion(self, ctx):
+        print(dir(ctx.command), dir(ctx), ctx.command.clean_params)

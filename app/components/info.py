@@ -10,11 +10,11 @@ class InfoCog(commands.Cog):
 
     @commands.command(
         name="ping",
-        description="The ping command",
+        description="Return Bot Latency",
         brief="Ping command"
     )
     async def ping(self, ctx) -> None:
-        """A sample command."""
+        """Return Bot Latency."""
         await ctx.send(f"Pong ! `{self.client.latency * 1000:.3f}` ms")
 
 
