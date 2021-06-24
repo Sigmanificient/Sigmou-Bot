@@ -1,18 +1,11 @@
-from typing import NoReturn
-
-import colorama
-from termcolor import colored
-
 import os
-from datetime import datetime
 
 import discord
 from discord.ext import commands, tasks
 
 import dotenv
 from app.timer import time
-
-colorama.init()
+from app.logging import Logger
 
 
 class Bot(commands.Bot):
@@ -25,22 +18,21 @@ class Bot(commands.Bot):
         )
 
         print(self)
+        self.log = Logger()
         self._skip_check = lambda x, y: False
         self.remove_command('help')
         self.load_extensions()
 
     def __repr__(self):
-        return colored(
-            '\n'.join(
-                (
-                    r"██████╗  ██████╗     ██████╗  █████╗ ██╗   ██╗███████╗    ██████╗  ██████╗ ████████╗",
-                    r"╚════██╗██╔═████╗    ██╔══██╗██╔══██╗╚██╗ ██╔╝██╔════╝    ██╔══██╗██╔═══██╗╚══██╔══╝",
-                    r" █████╔╝██║██╔██║    ██║  ██║███████║ ╚████╔╝ ███████╗    ██████╔╝██║   ██║   ██║",
-                    r" ╚═══██╗████╔╝██║    ██║  ██║██╔══██║  ╚██╔╝  ╚════██║    ██╔══██╗██║   ██║   ██║",
-                    r"██████╔╝╚██████╔╝    ██████╔╝██║  ██║   ██║   ███████║    ██████╔╝╚██████╔╝   ██║",
-                    r"╚═════╝  ╚═════╝     ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝    ╚═════╝  ╚═════╝    ╚═╝"
-                )
-            ), color='blue'
+        return '\n'.join(
+            (
+                r"██████╗  ██████╗     ██████╗  █████╗ ██╗   ██╗███████╗    ██████╗  ██████╗ ████████╗",
+                r"╚════██╗██╔═████╗    ██╔══██╗██╔══██╗╚██╗ ██╔╝██╔════╝    ██╔══██╗██╔═══██╗╚══██╔══╝",
+                r" █████╔╝██║██╔██║    ██║  ██║███████║ ╚████╔╝ ███████╗    ██████╔╝██║   ██║   ██║",
+                r" ╚═══██╗████╔╝██║    ██║  ██║██╔══██║  ╚██╔╝  ╚════██║    ██╔══██╗██║   ██║   ██║",
+                r"██████╔╝╚██████╔╝    ██████╔╝██║  ██║   ██║   ███████║    ██████╔╝╚██████╔╝   ██║",
+                r"╚═════╝  ╚═════╝     ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝    ╚═════╝  ╚═════╝    ╚═╝"
+            )
         )
 
     def load_extensions(self):
@@ -82,17 +74,3 @@ class Bot(commands.Bot):
     async def on_ready(self):
         ready_time = time("start", keep=True)
         self.log(f'Ready after {ready_time:,.3f}s')
-
-    @staticmethod
-    def log(message: str, color: str = 'green', temp=False) -> NoReturn:
-        if temp:
-            print(
-                colored('->', color='magenta'),
-                colored(message.ljust(80, ' '), color=color), end='\r'
-            )
-            return
-
-        print(
-            colored(f"[{datetime.now():%d/%b/%Y:%Hh %Mm %Ss}]", color='blue'),
-            colored(message, color=color)
-        )
