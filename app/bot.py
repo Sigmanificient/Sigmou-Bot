@@ -1,4 +1,5 @@
 import os
+from typing import Any, Callable
 
 import discord
 from discord.ext import commands, tasks
@@ -10,7 +11,7 @@ from app.logging import Logger
 
 class Bot(commands.Bot):
 
-    def __init__(self, prefix):
+    def __init__(self, prefix: str):
         super(Bot, self).__init__(
             command_prefix=prefix,
             intents=discord.Intents.default(),
@@ -18,12 +19,12 @@ class Bot(commands.Bot):
         )
 
         print(self)
-        self.log = Logger()
-        self._skip_check = lambda x, y: False
+        self.log: Logger = Logger()
+        self._skip_check: Callable[[Any, Any], False] = lambda _x, _y: False
         self.remove_command('help')
         self.load_extensions()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return '\n'.join(
             (
                 r"██████╗  ██████╗     ██████╗  █████╗ ██╗   ██╗███████╗    ██████╗  ██████╗ ████████╗",
@@ -40,7 +41,7 @@ class Bot(commands.Bot):
             if not filename.endswith("py"):
                 continue
 
-            component_name = filename[:-3]
+            component_name: str = filename[:-3]
 
             self.log(f"loading {component_name}", temp=True)
             self.load_extension(f"app.components.{component_name}")
@@ -67,10 +68,10 @@ class Bot(commands.Bot):
         )
 
     async def on_connect(self):
-        connect_time = time("start", keep=True)
+        connect_time: float = time("start", keep=True)
         self.log(f'Logged in as {self.user} after {connect_time:,.3f}s')
         self.update_latency.start()
 
     async def on_ready(self):
-        ready_time = time("start", keep=True)
+        ready_time: float = time("start", keep=True)
         self.log(f'Ready after {ready_time:,.3f}s')
