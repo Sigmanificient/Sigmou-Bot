@@ -6,5 +6,6 @@ __pycache__
 tests
 .env
 
-# Bot tests
+# Bot
 dev.py
+app/logs
