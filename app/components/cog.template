@@ -14,7 +14,7 @@ class TemplateCog(commands.Cog):
         aliases=('ex', 's'),
         brief="the sample"
     )
-    async def sample_command(self, ctx):
+    async def sample_command(self, ctx) -> None:
         """A sample command."""
         await ctx.send("sample")
 
