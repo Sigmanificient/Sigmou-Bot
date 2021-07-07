@@ -16,7 +16,7 @@ class Moderation(commands.Cog):
         aliases=('clear', 'cls'),
         brief="the sample",
     )
-    async def sample_command(self, ctx, limit=None) -> None:
+    async def sample_command(self, ctx, limit: int = None) -> None:
         """Clear the number of messages asked. If no number is given, clear all message in the channel."""
         await ctx.channel.purge(limit=limit)
         await ctx.send("Purged !")
