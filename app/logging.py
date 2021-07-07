@@ -1,9 +1,10 @@
-import colorama
 import os
-
 from datetime import datetime
-from termcolor import colored
 from typing import NoReturn, List
+
+import colorama
+from termcolor import colored
+
 
 MAX_LOG_SIZE: int = 8 * 1024 * 1024
 LOGS_DIR: str = './app/logs/'
