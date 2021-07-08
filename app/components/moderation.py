@@ -3,8 +3,8 @@ from discord.ext import commands
 from app.timer import time
 
 
-class Moderation(commands.Cog):
-    """A simple commands cog template."""
+class ModerationCog(commands.Cog):
+    """Admin and Moderator utils command."""
 
     def __init__(self, client):
         """Link to bot instance."""
@@ -23,4 +23,4 @@ class Moderation(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(Moderation(client))
+    client.add_cog(ModerationCog(client))

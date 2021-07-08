@@ -15,7 +15,8 @@ class Bot(commands.Bot):
         super(Bot, self).__init__(
             command_prefix=prefix,
             intents=discord.Intents.default(),
-            case_insensitive=True,
+            owner_id=812699388815605791,
+            case_insensitive=True
         )
 
         print(self)
