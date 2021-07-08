@@ -13,6 +13,7 @@ from app.logging import temp_print, warn
 class Bot(commands.Bot):
 
     def __init__(self, prefix: str):
+        """Sigmanificient Bot wrapper."""
         super(Bot, self).__init__(
             command_prefix=prefix,
             intents=discord.Intents.default(),
@@ -21,6 +22,9 @@ class Bot(commands.Bot):
         )
 
         print(self)
+        Embed.load(self)
+
+        self.colour: discord.Colour = discord.Colour(0xCE1A28)
         self._skip_check: Callable[[Any, Any], False] = lambda _x, _y: False
         self.remove_command('help')
         self.load_components()
