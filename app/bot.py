@@ -3,7 +3,6 @@ from typing import Any, Callable
 
 import discord
 from discord.ext import commands, tasks
-from app.logging import Logger
 
 import dotenv
 from app.timer import time
@@ -20,7 +19,6 @@ class Bot(commands.Bot):
         )
 
         print(self)
-        self.log: Logger = Logger()
         self._skip_check: Callable[[Any, Any], False] = lambda _x, _y: False
         self.remove_command('help')
         self.load_extensions()
@@ -44,9 +42,9 @@ class Bot(commands.Bot):
 
             component_name: str = filename[:-3]
 
-            self.log(f"loading {component_name}", temp=True)
+            print(f"loading {component_name}", end='\r')
             self.load_extension(f"app.components.{component_name}")
-            self.log(f"loaded {component_name}", temp=True)
+            print(f"loaded {component_name}", end='\r')
 
     def run(self):
         time("start")
