@@ -5,6 +5,7 @@ from typing import NoReturn, List
 import colorama
 from termcolor import colored
 
+colorama.init()
 
 MAX_LOG_SIZE: int = 8 * 1024 * 1024
 LOGS_DIR: str = './app/logs/'
@@ -13,8 +14,6 @@ LOGS_DIR: str = './app/logs/'
 class Logger:
 
     def __init__(self):
-        colorama.init()
-
         log_files: List[str] = os.listdir(LOGS_DIR)
         self._actual_log_file_path = sorted(log_files)[-1] if log_files else self.new_file
 
@@ -34,16 +33,20 @@ class Logger:
 
         return self.new_file
 
-    def __call__(self, message: str, color: str = 'green', temp=False) -> NoReturn:
-        if temp:
-            print(
-                colored('->', color='magenta'),
-                colored(message.ljust(80, ' '), color=color), end='\r'
-            )
-            return
-
+    def __call__(self, message: str, color: str = 'green') -> NoReturn:
         date: str = f"[{datetime.now():%d/%b/%Y:%Hh %Mm %Ss}]"
         print(colored(date, color='blue'), colored(message, color=color))
 
         with open(self.log_file_path, 'a+') as f:
             f.write(f"{date} {message}\n")
+
+
+def temp_print(message: str) -> NoReturn:
+    print(
+        colored('->', color='magenta'),
+        colored(message.ljust(80, ' '), color='green'), end='\r'
+    )
+
+
+def warn(message: str) -> NoReturn:
+    print(colored('[Warning]', color='red'), colored(message, 'yellow'))
