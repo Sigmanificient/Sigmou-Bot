@@ -3,11 +3,14 @@ from __future__ import annotations
 import random
 from typing import Any, Callable, Dict, Iterable, Optional, Union, TYPE_CHECKING
 
+from app.timed_ctx import TimedCtx
+from app.timer import time
+
 if TYPE_CHECKING:
     from app.bot import Bot
 
 import discord
-from discord.ext.commands import Context
+from discord.ext import commands
 
 
 class Embed(discord.Embed):
@@ -18,7 +21,7 @@ class Embed(discord.Embed):
         """Set the client instance."""
         cls.client: Bot = client
 
-    def __init__(self, ctx: Optional[Context]):
+    def __init__(self, ctx: Optional[TimedCtx]):
         """Initialise discord embed, set default bot color and set dynamic footer if ctx is passed."""
         if not self.client:
             raise RuntimeError("Embed hasn't been initialized yet.")
@@ -38,7 +41,13 @@ class Embed(discord.Embed):
 
             self.set_footer(
                 icon_url=self.client.user.avatar_url,
-                text=lucky or f"⏳ {self.client.latency * 1000:,.3f}ms   🔑 {self.ctx.prefix}help for more information"
+                text=lucky or '   '.join(
+                    (
+                        f"⚙️ {time(self.ctx.time) * 1000:,.3f}ms",
+                        f"⏳ {self.client.latency * 1000:,.3f} ms",
+                        f"🔑 {self.ctx.prefix}help for more information"
+                    )
+                )
             )
 
         return self

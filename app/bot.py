@@ -1,5 +1,4 @@
 import os
-from typing import Any, Callable
 
 from app.timer import time
 from app.embeds import Embed
@@ -15,18 +14,19 @@ class Bot(commands.Bot):
     def __init__(self, prefix: str):
         """Sigmanificient Bot wrapper."""
         super(Bot, self).__init__(
+            case_insensitive=True,
             command_prefix=commands.when_mentioned_or(prefix),
             intents=Intents.default(),
-            owner_id=812699388815605791,
-            case_insensitive=True
+            owner_id=812699388815605791
         )
 
         print(self)
         Embed.load(self)
 
         self.colour: Colour = Colour(0xCE1A28)
-        self._skip_check: Callable[[Any, Any], False] = lambda _x, _y: False
-        self.remove_command('help')
+        self.base_prefix = prefix
+
+        self.remove_command('help')  # removing default help command for overriding
         self.load_components()
 
     def __repr__(self) -> str:
@@ -76,9 +76,15 @@ class Bot(commands.Bot):
         await self.change_presence(
             activity=Activity(
                 type=ActivityType.watching,
-                name=f"{self.command_prefix}help | {self.latency * 1000:,.3f} ms"
+                name=f"{self.base_prefix}help | {self.latency * 1000:,.3f} ms"
             )
         )
 
     async def on_connect(self):
         self.update_latency.start()
+
+    async def process_commands(self, message):
+        ctx = await self.get_context(message)
+        ctx.time = time()
+
+        await self.invoke(ctx)
