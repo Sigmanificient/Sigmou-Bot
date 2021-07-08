@@ -1,13 +1,13 @@
 import os
 from typing import Any, Callable
 
-import discord
-from discord.ext import commands, tasks
-
-import dotenv
 from app.timer import time
 from app.embeds import Embed
 from app.logging import temp_print, warn
+
+import dotenv
+from discord import Activity, ActivityType, Colour, Intents
+from discord.ext import commands, tasks
 
 
 class Bot(commands.Bot):
@@ -16,7 +16,7 @@ class Bot(commands.Bot):
         """Sigmanificient Bot wrapper."""
         super(Bot, self).__init__(
             command_prefix=commands.when_mentioned_or(prefix),
-            intents=discord.Intents.default(),
+            intents=Intents.default(),
             owner_id=812699388815605791,
             case_insensitive=True
         )
@@ -24,7 +24,7 @@ class Bot(commands.Bot):
         print(self)
         Embed.load(self)
 
-        self.colour: discord.Colour = discord.Colour(0xCE1A28)
+        self.colour: Colour = Colour(0xCE1A28)
         self._skip_check: Callable[[Any, Any], False] = lambda _x, _y: False
         self.remove_command('help')
         self.load_components()
@@ -74,8 +74,8 @@ class Bot(commands.Bot):
     @tasks.loop(seconds=30)
     async def update_latency(self):
         await self.change_presence(
-            activity=discord.Activity(
-                type=discord.ActivityType.watching,
+            activity=Activity(
+                type=ActivityType.watching,
                 name=f"{self.command_prefix}help | {self.latency * 1000:,.3f} ms"
             )
         )
