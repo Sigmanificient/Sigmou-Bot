@@ -41,7 +41,7 @@ class Embed(discord.Embed):
             field_list: Union[Dict[Any, Any], Iterable[Iterable[Any, Any]]],
             map_title: Optional[Callable[[Any], str]] = str,
             map_values: Optional[Callable[[Any], str]] = str,
-            inline: bool = False
+            inline: bool = True
     ) -> Embed:
         """Add multiple fields from a list, dict or generator of fields with possible mapping."""
         if isinstance(field_list, dict):
