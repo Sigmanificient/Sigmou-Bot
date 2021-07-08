@@ -15,7 +15,7 @@ class Bot(commands.Bot):
     def __init__(self, prefix: str):
         """Sigmanificient Bot wrapper."""
         super(Bot, self).__init__(
-            command_prefix=prefix,
+            command_prefix=commands.when_mentioned_or(prefix),
             intents=discord.Intents.default(),
             owner_id=812699388815605791,
             case_insensitive=True
