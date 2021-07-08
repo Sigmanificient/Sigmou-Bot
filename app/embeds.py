@@ -18,23 +18,30 @@ class Embed(discord.Embed):
         """Set the client instance."""
         cls.client: Bot = client
 
-    def __init__(self, ctx=Optional[Context], **kwargs):
+    def __init__(self, ctx: Optional[Context]):
         """Initialise discord embed, set default bot color and set dynamic footer if ctx is passed."""
         if not self.client:
             raise RuntimeError("Embed hasn't been initialized yet.")
 
+        self.ctx = ctx
+
+    def __call__(self, **kwargs):
         super().__init__(**kwargs, colour=getattr(self.client, 'colour', self.client.user.colour))
 
-        if ctx is None:
-            return
+        if self.ctx is not None:
+            self.set_author(
+                name=f"Requested by {self.ctx.author} 🚀",
+                icon_url=self.ctx.author.avatar_url
+            )
 
-        self.set_author(name=f"Requested by {ctx.author} 🚀", icon_url=ctx.author.avatar_url)
-        lucky = "There was 1 / 1 000 000 chance for this message to show 🍀" * (not random.randint(0, 1_000_000))
+            lucky = "There was 1 / 1 000 000 chance for this message to show 🍀" * (not random.randint(0, 1_000_000))
 
-        self.set_footer(
-            icon_url=self.client.user.avatar_url,
-            text=lucky or f"⏳ {self.client.latency * 1000:,.3f}ms      🔑 {ctx.prefix}help for more information"
-        )
+            self.set_footer(
+                icon_url=self.client.user.avatar_url,
+                text=lucky or f"⏳ {self.client.latency * 1000:,.3f}ms   🔑 {self.ctx.prefix}help for more information"
+            )
+
+        return self
 
     def add_fields(
             self,
