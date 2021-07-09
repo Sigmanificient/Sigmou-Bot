@@ -1,12 +1,19 @@
+from typing import TYPE_CHECKING, NoReturn
+
 from discord.ext import commands
+
+if TYPE_CHECKING:
+    from app.bot import Bot
+
+from app.timed_ctx import TimedCtx
 
 
 class TemplateCog(commands.Cog):
     """A simple commands cog template."""
 
-    def __init__(self, client):
+    def __init__(self, client: Bot):
         """Link to bot instance."""
-        self.client = client
+        self.client: Bot = client
 
     @commands.command(
         name="sample",
@@ -14,10 +21,10 @@ class TemplateCog(commands.Cog):
         aliases=('ex', 's'),
         brief="the sample"
     )
-    async def sample_command(self, ctx) -> None:
+    async def sample_command(self, ctx: TimedCtx) -> None:
         """A sample command."""
         await ctx.send("sample")
 
 
-def setup(client):
+def setup(client: Bot) -> NoReturn:
     client.add_cog(TemplateCog(client))

@@ -1,4 +1,5 @@
 import os
+from typing import NoReturn, Optional
 
 from app.timer import time
 from app.embeds import Embed
@@ -24,7 +25,7 @@ class Bot(commands.Bot):
         Embed.load(self)
 
         self.colour: Colour = Colour(0xCE1A28)
-        self.base_prefix = prefix
+        self.base_prefix: str = prefix
 
         self.remove_command('help')  # removing default help command for overriding
         self.load_components()
@@ -41,7 +42,7 @@ class Bot(commands.Bot):
             )
         )
 
-    def load_components(self):
+    def load_components(self) -> NoReturn:
         for file_name in os.listdir("app/cogs"):
             if not file_name.endswith("py"):
                 continue
@@ -60,19 +61,19 @@ class Bot(commands.Bot):
             temp_print(f"loaded {component_name}")
             return True
 
-    def run(self):
+    def run(self) -> NoReturn:
         time("start")
         super().run(self.token)
 
     @property
-    def token(self):
+    def token(self) -> Optional[str]:
         if self.is_ready():
             return
 
         return dotenv.dotenv_values(".env").get('TOKEN')
 
     @tasks.loop(seconds=30)
-    async def update_latency(self):
+    async def update_latency(self) -> None:
         await self.change_presence(
             activity=Activity(
                 type=ActivityType.watching,
@@ -80,10 +81,10 @@ class Bot(commands.Bot):
             )
         )
 
-    async def on_connect(self):
+    async def on_connect(self) -> NoReturn:
         self.update_latency.start()
 
-    async def process_commands(self, message):
+    async def process_commands(self, message) -> NoReturn:
         ctx = await self.get_context(message)
         ctx.time = time()
 

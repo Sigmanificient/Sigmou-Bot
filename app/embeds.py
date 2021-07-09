@@ -28,7 +28,7 @@ class Embed(discord.Embed):
 
         self.ctx = ctx
 
-    def __call__(self, **kwargs):
+    def __call__(self, **kwargs) -> Embed:
         super().__init__(**kwargs, colour=getattr(self.client, 'colour', self.client.user.colour))
 
         if self.ctx is not None:
@@ -37,7 +37,7 @@ class Embed(discord.Embed):
                 icon_url=self.ctx.author.avatar_url
             )
 
-            lucky = "There was 1 / 1 000 000 chance for this message to show 🍀" * (not random.randint(0, 1_000_000))
+            lucky: str = "There was 1 / 1 000 000 chance for this message to show 🍀" * (not random.randint(0, 1_000_000))
 
             self.set_footer(
                 icon_url=self.client.user.avatar_url,

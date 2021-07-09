@@ -1,15 +1,21 @@
-from typing import Optional
+from typing import Optional, TYPE_CHECKING, Union
 
 from discord.ext import commands
+
+from app.timed_ctx import TimedCtx
+
+if TYPE_CHECKING:
+    from app.bot import Bot
+
 from app.timer import time
 
 
 class OtherCog(commands.Cog):
     """Gizmos and Gadget i dont know where to put."""
 
-    def __init__(self, client):
+    def __init__(self, client: Bot):
         """Link to bot instance."""
-        self.client = client
+        self.client: Bot = client
 
     @commands.command(
         name="timer",
@@ -17,9 +23,9 @@ class OtherCog(commands.Cog):
         aliases=('time', 't'),
         brief="A simple timer",
     )
-    async def timer_command(self, ctx, name: Optional[str] = None) -> None:
+    async def timer_command(self, ctx: TimedCtx, name: Optional[str] = None) -> None:
         """Clear the number of messages asked. If no number is given, clear all message in the channel."""
-        t = time(ctx.author.id if name is None or ctx.author.id != self.client.owner_id else name)
+        t: Union[str, float] = time(ctx.author.id if name is None or ctx.author.id != self.client.owner_id else name)
         if isinstance(t, float):
             await ctx.send(f"Timer ended: `{t:,.3f}s`")
             return
@@ -27,5 +33,5 @@ class OtherCog(commands.Cog):
         await ctx.send("Timer started...")
 
 
-def setup(client):
+def setup(client: Bot):
     client.add_cog(OtherCog(client))

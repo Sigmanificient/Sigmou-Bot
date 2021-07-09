@@ -1,4 +1,10 @@
 from os import listdir
+from typing import TYPE_CHECKING, Dict, Tuple, NoReturn
+
+from app.timed_ctx import TimedCtx
+
+if TYPE_CHECKING:
+    from app.bot import Bot
 
 from app.embeds import Embed
 from discord.ext import commands
@@ -7,13 +13,15 @@ from discord.ext import commands
 class InfoCog(commands.Cog):
     """A simple commands cog template."""
 
-    def __init__(self, client):
+    def __init__(self, client: Bot):
         """Link to bot instance."""
-        self.client = client
+        self.client: Bot = client
 
         # Preloading file content
-        self.files_info = {}
-        folders = (".", "app", "app/cogs")
+        self.files_info: Dict[str, str] = {}
+
+        folders: Tuple[str, ...] = (".", "app", "app/cogs")
+
         for file, path in {
             _f: path for path in folders for _f in listdir(path) if _f.endswith(".py")
         }.items():
@@ -27,12 +35,12 @@ class InfoCog(commands.Cog):
         description="Return Bot Latency",
         brief="Ping command"
     )
-    async def ping(self, ctx) -> None:
+    async def ping(self, ctx: TimedCtx) -> None:
         """Return Bot Latency."""
         await ctx.send(f"Pong ! `{self.client.latency * 1000:.3f}` ms")
 
     @commands.command(name="code")
-    async def get_code_info(self, ctx):
+    async def get_code_info(self, ctx: TimedCtx) -> None:
         await ctx.send(
             embed=Embed(ctx)(
                 title="Code Structure",
@@ -45,5 +53,5 @@ class InfoCog(commands.Cog):
         )
 
 
-def setup(client):
+def setup(client: Bot) -> NoReturn:
     client.add_cog(InfoCog(client))
