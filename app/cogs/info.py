@@ -13,7 +13,7 @@ class InfoCog(commands.Cog):
 
         # Preloading file content
         self.files_info = {}
-        folders = (".", "app", "app/components")
+        folders = (".", "app", "app/cogs")
         for file, path in {
             _f: path for path in folders for _f in listdir(path) if _f.endswith(".py")
         }.items():

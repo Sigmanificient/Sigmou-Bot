@@ -42,7 +42,7 @@ class Bot(commands.Bot):
         )
 
     def load_components(self):
-        for file_name in os.listdir("app/components"):
+        for file_name in os.listdir("app/cogs"):
             if not file_name.endswith("py"):
                 continue
 
@@ -50,7 +50,7 @@ class Bot(commands.Bot):
 
     def load_component(self, component_name: str) -> bool:
         try:
-            self.load_extension(f"app.components.{component_name}")
+            self.load_extension(f"app.cogs.{component_name}")
 
         except commands.ExtensionFailed as error:
             warn(f"Could not load component '{component_name}' due to {error.__cause__}")
