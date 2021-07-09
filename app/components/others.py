@@ -4,7 +4,7 @@ from discord.ext import commands
 from app.timer import time
 
 
-class UtilsCog(commands.Cog):
+class OtherCog(commands.Cog):
     """Gizmos and Gadget i dont know where to put."""
 
     def __init__(self, client):
@@ -17,10 +17,8 @@ class UtilsCog(commands.Cog):
         aliases=('time', 't'),
         brief="A simple timer",
     )
-    async def sample_command(self, ctx, name: Optional[str] = None) -> None:
+    async def timer_command(self, ctx, name: Optional[str] = None) -> None:
         """Clear the number of messages asked. If no number is given, clear all message in the channel."""
-        print(ctx.author.id == self.client.owner_id, name)
-        print(self.client.owner_id, ctx.author.id)
         t = time(ctx.author.id if name is None or ctx.author.id != self.client.owner_id else name)
         if isinstance(t, float):
             await ctx.send(f"Timer ended: `{t:,.3f}s`")
@@ -30,4 +28,4 @@ class UtilsCog(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(UtilsCog(client))
+    client.add_cog(OtherCog(client))
