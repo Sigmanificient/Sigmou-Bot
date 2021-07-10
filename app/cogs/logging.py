@@ -3,6 +3,7 @@ from typing import NoReturn
 from discord.ext import commands
 
 from app.bot import Bot
+from app.timed_ctx import TimedCtx
 from app.utils.logging import Logger
 from app.utils.timer import time
 
@@ -26,7 +27,7 @@ class LoggingCog(commands.Cog):
         self.log(f'Ready after {ready_time:,.3f}s')
 
     @commands.Cog.listener()
-    async def on_command_completion(self, ctx) -> None:
+    async def on_command_completion(self, ctx: TimedCtx) -> None:
         self.log(f"Successfully completed {ctx.command.name} by {ctx.author}")
 
 
