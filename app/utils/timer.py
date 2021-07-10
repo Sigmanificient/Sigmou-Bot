@@ -5,7 +5,11 @@ from typing import Dict, Optional, Union, List
 keys: Dict[Union[int, str], float] = {}
 
 
-def time(key: Optional[Union[int, str]] = None, keep: Optional[bool] = False) -> Union[float, int, str]:
+def time(
+        key: Optional[Union[int, str]] = None,
+        keep: Optional[bool] = False,
+        create: bool = True
+) -> Union[bool, float, int, str]:
     """Store a time marker link to a key then return time elapsed from key point."""
     if key is None:
         key: int = hash(random.random())
@@ -14,8 +18,11 @@ def time(key: Optional[Union[int, str]] = None, keep: Optional[bool] = False) ->
         t_key: float = keys.pop(key) if not keep else keys[key]
         return perf_counter() - t_key
 
-    keys[key] = perf_counter()
-    return key
+    if create:
+        keys[key] = perf_counter()
+        return key
+
+    return False
 
 
 def tests():

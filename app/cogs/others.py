@@ -20,14 +20,24 @@ class OtherCog(commands.Cog):
         aliases=('time', 't'),
         brief="A simple timer",
     )
-    async def timer_command(self, ctx: TimedCtx, name: Optional[str] = None) -> None:
+    async def timer_command(self, ctx: TimedCtx) -> None:
         """Clear the number of messages asked. If no number is given, clear all message in the channel."""
-        t: Union[str, float] = time(ctx.author.id if name is None or ctx.author.id != self.client.owner_id else name)
+        t: Union[str, float] = time(ctx.author.id)
         if isinstance(t, float):
             await ctx.send(f"Timer ended: `{t:,.3f}s`")
             return
 
         await ctx.send("Timer started...")
+
+    @commands.command(
+        name="lap",
+        description="A command that give the current timer of an user without stopping it.",
+        brief="timer lap"
+    )
+    async def lap_command(self, ctx: TimedCtx) -> None:
+        """give the current time of a timer without destroying it."""
+        t: Union[bool, float] = time(ctx.author.id, keep=True, create=False)
+        await ctx.send(f"`{t:,.3f}s`" if t else "You dont have any timer")
 
 
 def setup(client: Bot):
