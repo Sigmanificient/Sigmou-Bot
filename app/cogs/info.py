@@ -6,6 +6,7 @@ from discord.ext import commands
 from app.bot import Bot
 from app.timed_ctx import TimedCtx
 from app.utils.embeds import Embed
+from app.utils.timer import time
 
 
 class InfoCog(commands.Cog):
@@ -35,10 +36,19 @@ class InfoCog(commands.Cog):
     )
     async def ping(self, ctx: TimedCtx) -> None:
         """Return Bot Latency."""
-        await ctx.send(
-            embed=Embed(ctx)(
-                title="Pong !",
-                description=f"> `{self.client.latency * 1000:.3f}` ms"
+        t: str = time()
+
+        ping_embed = Embed(ctx)(title="Pong !").add_field(
+            name="Api latency",
+            value=f"> `{self.client.latency * 1000:.3f}` ms"
+        )
+
+        message = await ctx.send(embed=ping_embed)
+
+        await message.edit(
+            embed=ping_embed.add_field(
+                name="Client latency",
+                value=f"> `{time(t) * 1000:,.3f}` ms"
             )
         )
 
