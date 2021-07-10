@@ -36,20 +36,27 @@ class Embed(discord.Embed):
                 icon_url=self.ctx.author.avatar_url
             )
 
-            lucky: str = "There was 1 / 1 000 000 chance for this message to show 🍀" * (not random.randint(0, 1_000_000))
+        return self
 
-            self.set_footer(
-                icon_url=self.client.user.avatar_url,
-                text=lucky or '   '.join(
-                    (
-                        f"⚙️ {time(self.ctx.time) * 1000:,.3f}ms",
-                        f"⏳ {self.client.latency * 1000:,.3f} ms",
-                        f"🔑 {self.ctx.prefix}help for more information"
-                    )
+    def update_footer(self) -> Embed:
+        lucky: str = "There was 1 / 1 000 000 chance for this message to show 🍀" * (not random.randint(0, 1_000_000))
+
+        self.set_footer(
+            icon_url=self.client.user.avatar_url,
+            text=lucky or '   '.join(
+                (
+                    f"⚙️ {time(self.ctx.time, keep=True) * 1000:,.3f}ms",
+                    f"⏳ {self.client.latency * 1000:,.3f} ms",
+                    f"🔑 {self.ctx.prefix}help for more information"
                 )
             )
+        )
 
         return self
+
+    def to_dict(self):
+        self.update_footer()
+        return super().to_dict()
 
     def add_fields(
             self,
@@ -70,3 +77,6 @@ class Embed(discord.Embed):
             )
 
         return self
+
+    def __del__(self):
+        time(self.ctx.time)
