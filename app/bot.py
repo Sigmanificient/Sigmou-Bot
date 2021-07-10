@@ -1,9 +1,9 @@
 import os
 from typing import NoReturn, Optional
 
-from app.timer import time
-from app.embeds import Embed
-from app.logging import temp_print, warn
+from app.utils.timer import time
+from app.utils.embeds import Embed
+from app.utils.logging import temp_print, warn
 
 import dotenv
 from discord import Activity, ActivityType, Colour, Intents

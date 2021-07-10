@@ -1,11 +1,10 @@
-from typing import TYPE_CHECKING, NoReturn
+from typing import NoReturn
 
-if TYPE_CHECKING:
-    from app.bot import Bot
-
-from app.logging import Logger
-from app.timer import time
 from discord.ext import commands
+
+from app.bot import Bot
+from app.utils.logging import Logger
+from app.utils.timer import time
 
 
 class LoggingCog(commands.Cog):

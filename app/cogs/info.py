@@ -1,13 +1,11 @@
 from os import listdir
-from typing import TYPE_CHECKING, Dict, Tuple, NoReturn
+from typing import Dict, Tuple, NoReturn
 
-from app.timed_ctx import TimedCtx
-
-if TYPE_CHECKING:
-    from app.bot import Bot
-
-from app.embeds import Embed
 from discord.ext import commands
+
+from app.bot import Bot
+from app.timed_ctx import TimedCtx
+from app.utils.embeds import Embed
 
 
 class InfoCog(commands.Cog):

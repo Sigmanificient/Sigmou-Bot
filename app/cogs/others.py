@@ -1,13 +1,10 @@
-from typing import Optional, TYPE_CHECKING, Union
+from typing import Optional, Union
 
 from discord.ext import commands
 
+from app.bot import Bot
 from app.timed_ctx import TimedCtx
-
-if TYPE_CHECKING:
-    from app.bot import Bot
-
-from app.timer import time
+from app.utils.timer import time
 
 
 class OtherCog(commands.Cog):

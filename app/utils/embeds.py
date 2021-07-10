@@ -4,13 +4,12 @@ import random
 from typing import Any, Callable, Dict, Iterable, Optional, Union, TYPE_CHECKING
 
 from app.timed_ctx import TimedCtx
-from app.timer import time
+from app.utils.timer import time
 
 if TYPE_CHECKING:
     from app.bot import Bot
 
 import discord
-from discord.ext import commands
 
 
 class Embed(discord.Embed):

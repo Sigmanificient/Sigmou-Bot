@@ -2,12 +2,8 @@ from typing import NoReturn
 
 from discord.ext import commands
 
-from typing import TYPE_CHECKING
-
 from app.timed_ctx import TimedCtx
-
-if TYPE_CHECKING:
-    from app.bot import Bot
+from app.bot import Bot
 
 
 class ModerationCog(commands.Cog):
