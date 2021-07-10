@@ -35,7 +35,12 @@ class InfoCog(commands.Cog):
     )
     async def ping(self, ctx: TimedCtx) -> None:
         """Return Bot Latency."""
-        await ctx.send(f"Pong ! `{self.client.latency * 1000:.3f}` ms")
+        await ctx.send(
+            embed=Embed(ctx)(
+                title="Pong !",
+                description=f"> `{self.client.latency * 1000:.3f}` ms"
+            )
+        )
 
     @commands.command(name="code")
     async def get_code_info(self, ctx: TimedCtx) -> None:
