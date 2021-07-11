@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import random
+from time import time as epoch_unix
 from typing import Any, Callable, Dict, Iterable, Optional, Union, TYPE_CHECKING
 
 from app.timed_ctx import TimedCtx
 from app.utils.timer import time
+from app.utils.humanify import human_time
 
 if TYPE_CHECKING:
     from app.bot import Bot
@@ -45,9 +47,9 @@ class Embed(discord.Embed):
             icon_url=self.client.user.avatar_url,
             text=lucky or '   '.join(
                 (
-                    f"⚙️ {time(self.ctx.time, keep=True) * 1000:,.3f}ms",
-                    f"⏳ {self.client.latency * 1000:,.3f} ms",
-                    f"🔑 {self.ctx.prefix}help for more information"
+                    f"⚙️ {human_time(time(self.ctx.time, keep=True))}",
+                    f"⏳ {human_time(self.client.latency)}",
+                    f"🔑 {self.ctx.prefix}help",
                 )
             )
         )
@@ -61,6 +63,7 @@ class Embed(discord.Embed):
     def add_fields(
             self,
             field_list: Union[Dict[Any, Any], Iterable[Iterable[Any, Any]]],
+            checks: Optional[Callable[[Any], Any]] = bool,
             map_title: Optional[Callable[[Any], str]] = str,
             map_values: Optional[Callable[[Any], str]] = str,
             inline: bool = True
@@ -70,11 +73,13 @@ class Embed(discord.Embed):
             field_list = field_list.items()
 
         for field_name, field_value in field_list:
-            self.add_field(
-                name=map_title(field_name),
-                value=map_values(field_value),
-                inline=inline
-            )
+            val = map_values(field_value)
+            if checks(val):
+                self.add_field(
+                    name=map_title(field_name),
+                    value=map_values(field_value),
+                    inline=inline
+                )
 
         return self
 
