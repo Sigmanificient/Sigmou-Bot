@@ -73,6 +73,30 @@ class InfoCog(commands.Cog):
     async def help_command(self, ctx: TimedCtx, command: str) -> None:
         await ctx.send("Nope.")
 
+    @commands.command(
+        name='cmds',
+        aliases=('all', 'all_cmds'),
+        brief="List every command osf the bot"
+    )
+    @commands.cooldown(2, 60, commands.BucketType.user)
+    async def all_commands(self, ctx: TimedCtx) -> None:
+        """
+        Provide a list of every command available command for the user,
+        split by extensions and organized in alphabetical order.
+        Will not show the event-only extension
+         """
+        await ctx.send(
+            embed=Embed(ctx)(
+                title='All commands',
+                description=f"> `{len(self.client.commands)}` commands available"
+            ).add_fields(
+                self.client.cogs.items(), checks=len,
+                map_title=lambda cog_name: cog_name.capitalize(),
+                map_values=lambda cog: '  •  '.join(sorted(f'`{c.name}`' for c in cog.get_commands())),
+                inline=False
+            )
+        )
+
 
 def setup(client: Bot) -> NoReturn:
     client.add_cog(InfoCog(client))
