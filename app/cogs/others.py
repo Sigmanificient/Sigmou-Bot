@@ -15,10 +15,10 @@ class OtherCog(commands.Cog):
         self.client: Bot = client
 
     @commands.command(
-        name="timer",
-        description="A simple timer commands that start on first call, then give time elapsed.",
-        aliases=('time', 't'),
-        brief="A simple timer",
+        name="chrono",
+        description="A simple chronometer commands that start on first call, then give time elapsed.",
+        aliases=('ch', 'cn'),
+        brief="A simple chronometer",
     )
     async def timer_command(self, ctx: TimedCtx) -> None:
         """Clear the number of messages asked. If no number is given, clear all message in the channel."""
@@ -31,8 +31,8 @@ class OtherCog(commands.Cog):
 
     @commands.command(
         name="lap",
-        description="A command that give the current timer of an user without stopping it.",
-        brief="timer lap"
+        description="A command that give the current chronometer time of an user without stopping it.",
+        brief="chronometer lap"
     )
     async def lap_command(self, ctx: TimedCtx) -> None:
         """give the current time of a timer without destroying it."""
