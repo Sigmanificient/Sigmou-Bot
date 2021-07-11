@@ -1,3 +1,4 @@
+import asyncio
 from typing import Optional, Union
 
 from discord.ext import commands
@@ -20,7 +21,7 @@ class OtherCog(commands.Cog):
         aliases=('ch', 'cn'),
         brief="A simple chronometer",
     )
-    async def timer_command(self, ctx: TimedCtx) -> None:
+    async def chronometer_command(self, ctx: TimedCtx) -> None:
         """Clear the number of messages asked. If no number is given, clear all message in the channel."""
         t: Union[str, float] = time(ctx.author.id)
         if isinstance(t, float):
@@ -38,6 +39,16 @@ class OtherCog(commands.Cog):
         """give the current time of a timer without destroying it."""
         t: Union[bool, float] = time(ctx.author.id, keep=True, create=False)
         await ctx.send(f"`{t:,.3f}s`" if t else "You dont have any timer")
+
+    @commands.command(
+        name="timer",
+        description="A command that wait the given time then ping the user.",
+        brief="A simple timer command"
+    )
+    async def timer_command(self, ctx: TimedCtx, seconds: int) -> None:
+        """A simple timer that ping you at end"""
+        await asyncio.sleep(seconds)
+        await ctx.send("> Ended", reference=ctx.message)
 
 
 def setup(client: Bot):
