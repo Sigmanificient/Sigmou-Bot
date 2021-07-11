@@ -24,6 +24,7 @@ class Bot(commands.Bot):
         print(self)
         Embed.load(self)
 
+        self._skip_check = lambda x, y: False
         self.colour: Colour = Colour(0xCE1A28)
         self.base_prefix: str = prefix
 

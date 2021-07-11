@@ -34,7 +34,7 @@ class InfoCog(commands.Cog):
         description="Return Bot Latency",
         brief="Ping command"
     )
-    async def ping(self, ctx: TimedCtx) -> None:
+    async def ping_command(self, ctx: TimedCtx) -> None:
         """Return Bot Latency."""
         t: str = time()
 
@@ -53,7 +53,7 @@ class InfoCog(commands.Cog):
         )
 
     @commands.command(name="code")
-    async def get_code_info(self, ctx: TimedCtx) -> None:
+    async def code_command(self, ctx: TimedCtx) -> None:
         await ctx.send(
             embed=Embed(ctx)(
                 title="Code Structure",
@@ -64,6 +64,14 @@ class InfoCog(commands.Cog):
                 map_values=lambda file: "`%s` characters\n `%s` lines" % (f"{len(file):,}", len(file.splitlines())),
             )
         )
+
+    @commands.command(
+        name="help",
+        description="A command to find ever information about an other command",
+        brief="The global help command"
+    )
+    async def help_command(self, ctx: TimedCtx, command: str) -> None:
+        await ctx.send("Nope.")
 
 
 def setup(client: Bot) -> NoReturn:
