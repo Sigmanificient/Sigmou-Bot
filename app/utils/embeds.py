@@ -70,7 +70,7 @@ class Embed(discord.Embed):
     ) -> Embed:
         """Add multiple fields from a list, dict or generator of fields with possible mapping."""
         if isinstance(field_list, dict):
-            field_list = field_list.items()
+            field_list: Iterable[Iterable[Any, Any]] = field_list.items()
 
         for field_name, field_value in field_list:
             val = map_values(field_value)
