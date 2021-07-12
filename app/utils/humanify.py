@@ -12,8 +12,8 @@ sub_second_unit = {
 }
 
 
-def human_time(time: float) -> str:
-    sup, sub = divmod(time, 1)
+def pretty_time(time: float) -> str:
+    sup = int(time)
     display_units = []
 
     if sup:
@@ -26,13 +26,6 @@ def human_time(time: float) -> str:
     if sup:
         display_units.append(f'{sup}y')
 
-    if sub:
-        for unit, equal in sub_second_unit.items():
-            n, sub = divmod(sub, equal)
-
-            if n:
-                display_units.append(f'{round(n + sub / equal):.0f}{unit}')
-
     if len(display_units) == 1:
         return display_units[0]
 
@@ -42,26 +35,30 @@ def human_time(time: float) -> str:
     return ', '.join(display_units) + f' & {end}'
 
 
+def pretty_time_small(seconds: float) -> str:
+    for unit, eq in sub_second_unit.items():
+        if eq < seconds:
+            return f"{seconds / eq:,.2f}{unit}"
+
+
 def main():
-    assert human_time(1) == '1s'
-    assert human_time(10) == '10s'
+    assert pretty_time(1) == '1s'
+    assert pretty_time(10) == '10s'
 
-    assert human_time(60) == '1m'
-    assert human_time(3600) == '1h'
+    assert pretty_time(60) == '1m'
+    assert pretty_time(3600) == '1h'
 
-    assert human_time(86400) == '1d'
-    assert human_time(31536000) == '1y'
+    assert pretty_time(86400) == '1d'
+    assert pretty_time(31536000) == '1y'
 
-    assert human_time(99999999) == '3y, 62d, 9h, 46m & 39s'
-    assert human_time(31536001) == '1y & 1s'
+    assert pretty_time(99999999) == '3y, 62d, 9h, 46m & 39s'
+    assert pretty_time(31536001) == '1y & 1s'
 
-    assert human_time(0.1) == '100ms'
-    assert human_time(0.001) == '1ms'
+    assert pretty_time_small(0.1) == '100.00ms'
+    assert pretty_time_small(0.005) == '5.00ms'
 
-    assert human_time(0.0001) == '100µs'
-    assert human_time(0.000001) == '1µs'
-
-    assert human_time(0.0000001) == '100ns'
+    assert pretty_time_small(0.0005) == '500.00µs'
+    assert pretty_time_small(0.0000005) == '500.00ns'
 
 
 if __name__ == '__main__':

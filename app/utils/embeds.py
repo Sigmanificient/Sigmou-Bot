@@ -6,7 +6,7 @@ from typing import Any, Callable, Dict, Iterable, Optional, Union, TYPE_CHECKING
 
 from app.timed_ctx import TimedCtx
 from app.utils.timer import time
-from app.utils.humanify import human_time
+from app.utils.humanify import pretty_time, pretty_time_small
 
 if TYPE_CHECKING:
     from app.bot import Bot
@@ -47,8 +47,8 @@ class Embed(discord.Embed):
             icon_url=self.client.user.avatar_url,
             text=lucky or '   '.join(
                 (
-                    f"⚙️ {human_time(time(self.ctx.time, keep=True))}",
-                    f"⏳ {human_time(self.client.latency)}",
+                    f"⚙️ {pretty_time_small(time(self.ctx.time, keep=True))}",
+                    f"⏳ {pretty_time_small(self.client.latency)}",
                     f"🔑 {self.ctx.prefix}help",
                 )
             )

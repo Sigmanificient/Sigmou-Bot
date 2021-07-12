@@ -1,5 +1,5 @@
 from os import listdir
-from typing import Dict, Tuple, NoReturn
+from typing import Dict, Tuple, NoReturn, Optional
 
 from discord.ext import commands
 
@@ -70,7 +70,7 @@ class InfoCog(commands.Cog):
         description="A command to find ever information about an other command",
         brief="The global help command"
     )
-    async def help_command(self, ctx: TimedCtx, command: str) -> None:
+    async def help_command(self, ctx: TimedCtx, command: Optional[str] = None) -> None:
         await ctx.send("Nope.")
 
     @commands.command(
@@ -84,7 +84,7 @@ class InfoCog(commands.Cog):
         Provide a list of every command available command for the user,
         split by extensions and organized in alphabetical order.
         Will not show the event-only extension
-         """
+        """
         await ctx.send(
             embed=Embed(ctx)(
                 title='All commands',
