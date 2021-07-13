@@ -9,10 +9,11 @@ import discord
 
 import app.bot
 
-TEST_SERVER_ID: int = 859792357032591380
+TEST_SERVER_ID: int = 857336281583059005
+TEST_CHANNEL_ID: int = 864244358517358612
 
 commands_to_test: List[str] = [
-    'panel', 'code', 'panel', 'purge 1'
+
 ]
 
 
@@ -34,13 +35,16 @@ class Bot(app.bot.Bot):
             await self.close()
             raise ValueError("Invalid server ID.")
 
-        self.test_channel = await test_server.create_text_channel(f"auto-test {self.user}")
+        self.test_channel = test_server.get_channel(TEST_CHANNEL_ID)
+
+        if self.test_channel is None:
+            self.test_channel = await test_server.create_text_channel(f"auto-test {self.user}")
 
         for command in commands_to_test:
             await self.test_channel.send(f"{self.command_prefix}{command}")
 
         await asyncio.sleep(10)
-        print("Automated test complete.")
+        await self.test_channel.send("**Automated test complete.**")
 
     async def on_message(self, message):
         if message.author != self.user:
