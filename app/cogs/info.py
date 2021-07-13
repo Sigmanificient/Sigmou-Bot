@@ -2,6 +2,7 @@ import inspect
 from os import listdir
 from typing import Dict, Tuple, NoReturn, List
 
+import psutil
 from discord.ext import commands
 
 from app.bot import Bot
@@ -135,6 +136,37 @@ class InfoCog(commands.Cog):
                 map_title=lambda cog_name: cog_name.capitalize(),
                 map_values=lambda cog: '  •  '.join(sorted(f'`{c.name}`' for c in cog.get_commands())),
                 inline=False
+            )
+        )
+
+    @commands.command(
+        name="panel",
+        aliases=('pan',),
+        brief="Some data about the panel"
+    )
+    @commands.is_owner()
+    async def panel_stats(self, ctx) -> None:
+        mb: int = 1024 ** 2
+
+        vm = psutil.virtual_memory()
+        cpu_freq = psutil.cpu_freq()
+        cpu_percent = psutil.cpu_percent()
+        disk = psutil.disk_usage('.')
+
+        stats = {
+            'ram': (100 * (vm.used / vm.total), f'{(vm.total / mb) / 1000:,.3f}', 'Gb'),
+            'cpu': (cpu_percent, f"{cpu_freq.current / 1000:.1f}`/`{cpu_freq.max / 1000:.1f}", 'Ghz'),
+            'disk': (100 * (disk.used / disk.total), f'{disk.total / mb:,.0f}', 'Mb')
+        }
+
+        await ctx.send(
+            embed=Embed(ctx)(
+                title="Server Report",
+                description="The bot is hosted on a private vps."
+            ).add_fields(
+                stats.items(),
+                map_title=lambda name: name.upper(),
+                map_values=lambda percent, info, unit: f"> `{percent:.3f}` **%**\n- `{info}` **{unit}**"
             )
         )
 

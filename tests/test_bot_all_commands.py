@@ -13,7 +13,6 @@ TEST_SERVER_ID: int = 857336281583059005
 TEST_CHANNEL_ID: int = 864244358517358612
 
 commands_to_test: List[str] = [
-
 ]
 
 

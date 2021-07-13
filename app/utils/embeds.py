@@ -73,11 +73,11 @@ class Embed(discord.Embed):
             field_list: Iterable[Iterable[Any, Any]] = field_list.items()
 
         for field_name, field_value in field_list:
-            val = map_values(field_value)
+            val = map_values(field_value) if not isinstance(field_value, tuple) else map_values(*field_value)
             if checks(val):
                 self.add_field(
                     name=map_title(field_name),
-                    value=map_values(field_value),
+                    value=val,
                     inline=inline
                 )
 

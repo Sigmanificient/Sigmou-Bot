@@ -17,8 +17,8 @@ class Bot(commands.Bot):
         super(Bot, self).__init__(
             case_insensitive=True,
             command_prefix=commands.when_mentioned_or(prefix),
-            intents=Intents.default(),
-            owner_id=812699388815605791
+            owner_ids=(812699388815605791, 856491941184536597),
+            intents=Intents.default()
         )
 
         print(self)
