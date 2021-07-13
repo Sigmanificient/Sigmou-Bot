@@ -116,14 +116,6 @@ class InfoCog(commands.Cog):
         )
 
     @commands.command(
-        name="help",
-        description="A command to find ever information about an other command",
-        brief="The global help command"
-    )
-    async def help_command(self, ctx: TimedCtx) -> None:
-        await ctx.invoke(self.help_command_default)
-
-    @commands.command(
         name='cmds',
         aliases=('all', 'all_cmds'),
         brief="List every command osf the bot"
