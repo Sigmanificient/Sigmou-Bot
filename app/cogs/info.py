@@ -24,7 +24,8 @@ class InfoCog(commands.Cog):
         folders: Tuple[str, ...] = (".", "app", "app/cogs")
 
         for file, path in {
-            _f: path for path in folders for _f in listdir(path) if _f.endswith(".py")
+            _f: path for path in folders
+            for _f in listdir(path) if _f.endswith(".py")
         }.items():
             with open(f"{path}/{file}", encoding="utf-8") as f:
                 self.files_info[file] = f.read()
@@ -77,11 +78,19 @@ class InfoCog(commands.Cog):
         await ctx.send(
             embed=Embed(ctx)(
                 title="Code Structure",
-                description=f"> This is the whole code structure of {self.client.user.name}!"
+                description=(
+                    "> This is the whole code structure of "
+                    f"{self.client.user.name}!"
+                )
             ).add_fields(
                 self.files_info,
-                map_title=lambda name: f"📝 {name}" if name != "Total" else "📊 Total",
-                map_values=lambda file: "`%s` characters\n `%s` lines" % (f"{len(file):,}", len(file.splitlines())),
+                map_title=lambda name: (
+                    f"📝 {name}" if name != "Total" else "📊 Total"
+                ),
+                map_values=lambda file: (
+                    f"`{len(file)}` characters"
+                    f"\n `{len(file.splitlines())}` lines"
+                ),
             )
         )
 
@@ -108,10 +117,15 @@ class InfoCog(commands.Cog):
         await ctx.send(
             embed=Embed(ctx)(
                 title=f"General Help {self.client.user.name}",
-                description=f"- `{total}`/`{len(self.client.commands)}` available commands\n`{aliases}` aliases"
+                description=(
+                    f"- `{total}`/`{len(self.client.commands)}` "
+                    f"available commands\n`{aliases}` aliases"
+                )
             ).add_fields(
                 all_commands,
-                map_values=lambda cog_commands: ', '.join(f"`{command.name}`" for command in cog_commands),
+                map_values=lambda cog_commands: ', '.join(
+                    f"`{command.name}`" for command in cog_commands
+                ),
                 inline=False
             )
         )
@@ -130,11 +144,16 @@ class InfoCog(commands.Cog):
         await ctx.send(
             embed=Embed(ctx)(
                 title='All commands',
-                description=f"> `{len(self.client.commands)}` commands available"
+                description=(
+                    f"> `{len(self.client.commands)}` "
+                    "commands available"
+                )
             ).add_fields(
                 self.client.cogs.items(), checks=len,
                 map_title=lambda cog_name: cog_name.capitalize(),
-                map_values=lambda cog: '  •  '.join(sorted(f'`{c.name}`' for c in cog.get_commands())),
+                map_values=lambda cog: '  •  '.join(
+                    sorted(f'`{c.name}`' for c in cog.get_commands())
+                ),
                 inline=False
             )
         )
@@ -154,9 +173,20 @@ class InfoCog(commands.Cog):
         disk = psutil.disk_usage('.')
 
         stats = {
-            'ram': (100 * (vm.used / vm.total), f'{(vm.total / mb) / 1000:,.3f}', 'Gb'),
-            'cpu': (cpu_percent, f"{cpu_freq.current / 1000:.1f}`/`{cpu_freq.max / 1000:.1f}", 'Ghz'),
-            'disk': (100 * (disk.used / disk.total), f'{disk.total / mb:,.0f}', 'Mb')
+            'ram': (
+                100 * (vm.used / vm.total),
+                f'{(vm.total / mb) / 1000:,.3f}',
+                'Gb'
+            ),
+            'cpu': (
+                cpu_percent,
+                f"{cpu_freq.current / 1000:.1f}`/`{cpu_freq.max / 1000:.1f}",
+                'Ghz'
+            ),
+            'disk': (
+                100 * (disk.used / disk.total),
+                f'{disk.total / mb:,.0f}', 'Mb'
+            )
         }
 
         await ctx.send(
@@ -166,10 +196,11 @@ class InfoCog(commands.Cog):
             ).add_fields(
                 stats.items(),
                 map_title=lambda name: name.upper(),
-                map_values=lambda percent, info, unit: f"> `{percent:.3f}` **%**\n- `{info}` **{unit}**"
+                map_values=lambda percent, info, unit: (
+                    f"> `{percent:.3f}` **%**\n- `{info}` **{unit}**"
+                )
             )
         )
-
 
     @commands.command(
         name="invite",
@@ -181,13 +212,11 @@ class InfoCog(commands.Cog):
         await ctx.send(
             embed=Embed(ctx)(
                 title="Invite the Bot !",
-                description='\n'.join(
-                    (
-                        "> Click this link to invite this bot on your servers !",
-                        "You need to have permissions on the server to use the link",
-                        "[invite me now](https://discord.com/api/oauth2/authorize?client_"
-                        f"id={self.client.user.id}&permissions=8&scope=bot)"
-                    )
+                description=(
+                    "> Click this link to invite this bot on your servers !\n"
+                    "You need to have the required permissions on the server.\n"
+                    "[invite me now](https://discord.com/api/oauth2/authorize\n"
+                    f"?client_id={self.client.user.id}&permissions=8&scope=bot)"
                 )
             )
         )

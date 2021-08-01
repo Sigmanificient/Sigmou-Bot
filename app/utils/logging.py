@@ -15,7 +15,9 @@ class Logger:
 
     def __init__(self):
         log_files: List[str] = os.listdir(LOGS_DIR)
-        self._actual_log_file_path = sorted(log_files)[-1] if log_files else self.new_file
+        self._actual_log_file_path = (
+            sorted(log_files)[-1] if log_files else self.new_file
+        )
 
     @property
     def new_file(self) -> str:

@@ -28,19 +28,17 @@ class Bot(commands.Bot):
         self.colour: Colour = Colour(0xCE1A28)
         self.base_prefix: str = prefix
 
-        self.remove_command('help')  # removing default help command for overriding
+        # removing default help command for overriding
+        self.remove_command('help')
         self.load_components()
 
     def __repr__(self) -> str:
-        return '\n'.join(
-            (
-                r"██████╗  ██████╗     ██████╗  █████╗ ██╗   ██╗███████╗    ██████╗  ██████╗ ████████╗",
-                r"╚════██╗██╔═████╗    ██╔══██╗██╔══██╗╚██╗ ██╔╝██╔════╝    ██╔══██╗██╔═══██╗╚══██╔══╝",
-                r" █████╔╝██║██╔██║    ██║  ██║███████║ ╚████╔╝ ███████╗    ██████╔╝██║   ██║   ██║",
-                r" ╚═══██╗████╔╝██║    ██║  ██║██╔══██║  ╚██╔╝  ╚════██║    ██╔══██╗██║   ██║   ██║",
-                r"██████╔╝╚██████╔╝    ██████╔╝██║  ██║   ██║   ███████║    ██████╔╝╚██████╔╝   ██║",
-                r"╚═════╝  ╚═════╝     ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝    ╚═════╝  ╚═════╝    ╚═╝"
-            )
+        return (
+            r"   _____\n"
+            r"  / __(_)__ ___ _  ___  __ __\n"
+            r" _\ \/ / _ `/  ' \/ _ \/ // /\n"
+            r"/___/_/\_, /_/_/_/\___/\_,_/\n"
+            r"      /___/\n"
         )
 
     def load_components(self) -> NoReturn:
@@ -55,7 +53,10 @@ class Bot(commands.Bot):
             self.load_extension(f"app.cogs.{component_name}")
 
         except commands.ExtensionFailed as error:
-            warn(f"Could not load component '{component_name}' due to {error.__cause__}")
+            warn(
+                f"Could not load component '{component_name}' "
+                f"due to {error.__cause__}"
+            )
             return False
 
         else:

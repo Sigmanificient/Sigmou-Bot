@@ -17,7 +17,10 @@ class LoggingCog(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx: TimedCtx, error: Exception) -> None:
         if isinstance(error, discord.ext.commands.BadArgument):
-            await ctx.send("> Une erreur est survenue sur un des paramètres de la commande")
+            await ctx.send(
+                "> Une erreur est survenue sur un des paramètres de la commande"
+            )
+
             return
 
         await ctx.send(f"**Error report for command `{ctx.command}`**")

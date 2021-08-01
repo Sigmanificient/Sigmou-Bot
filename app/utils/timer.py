@@ -10,7 +10,8 @@ def time(
         keep: bool = False,
         create: bool = True
 ) -> Union[bool, float, str]:
-    """Store a time marker link to a key then return time elapsed from key point."""
+    """Store a time marker link to a key
+        then return time elapsed from key point."""
     if key is None:
         key: float = random.random()
 

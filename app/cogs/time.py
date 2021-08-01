@@ -17,12 +17,16 @@ class OtherCog(commands.Cog):
 
     @commands.command(
         name="chrono",
-        description="A simple chronometer commands that start on first call, then give time elapsed.",
+        description=(
+            "A simple chronometer commands that start on first call, "
+            "then give time elapsed. "
+        ),
         aliases=('ch', 'cn'),
         brief="A simple chronometer",
     )
     async def chronometer_command(self, ctx: TimedCtx) -> None:
-        """Clear the number of messages asked. If no number is given, clear all message in the channel."""
+        """Clear the number of messages asked.
+        If no number is given, clear all message in the channel."""
         t: Union[str, float] = time(ctx.author.id)
         if isinstance(t, float):
             await ctx.send(f"Timer ended: `{t:,.3f}s`")
@@ -32,7 +36,10 @@ class OtherCog(commands.Cog):
 
     @commands.command(
         name="lap",
-        description="A command that give the current chronometer time of an user without stopping it.",
+        description=(
+            "A command that give the current chronometer time of an user "
+            "without stopping it. "
+        ),
         brief="chronometer lap"
     )
     async def lap_command(self, ctx: TimedCtx) -> None:
