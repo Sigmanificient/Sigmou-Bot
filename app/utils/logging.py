@@ -8,13 +8,16 @@ from termcolor import colored
 colorama.init()
 
 MAX_LOG_SIZE: int = 8 * 1024 * 1024
-LOGS_DIR: str = './app/logs/'
+LOGS_DIR: str = 'app/logs/'
 
 
 class Logger:
 
     def __init__(self):
-        log_files: List[str] = os.listdir(LOGS_DIR)
+        log_files: List[str] = [
+            f for f in os.listdir(LOGS_DIR) if f.endswith('.log')
+        ]
+
         self._actual_log_file_path = (
             sorted(log_files)[-1] if log_files else self.new_file
         )
