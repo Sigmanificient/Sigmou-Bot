@@ -40,10 +40,14 @@ class Logger:
 
     def __call__(self, message: str, color: str = 'green') -> NoReturn:
         date: str = f"[{datetime.now():%d/%b/%Y:%Hh %Mm %Ss}]"
-        print(colored(date, color='blue'), colored(message, color=color))
 
         with open(self.log_file_path, 'a+') as f:
             f.write(f"{date} {message}\n")
+
+        print(
+            colored(date, color='blue'),
+            colored(message, color=color)
+        )
 
 
 def temp_print(message: str) -> NoReturn:
