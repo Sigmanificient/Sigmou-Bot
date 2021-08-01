@@ -33,12 +33,14 @@ class Bot(commands.Bot):
         self.load_components()
 
     def __repr__(self) -> str:
-        return (
-            r"   _____\n"
-            r"  / __(_)__ ___ _  ___  __ __\n"
-            r" _\ \/ / _ `/  ' \/ _ \/ // /\n"
-            r"/___/_/\_, /_/_/_/\___/\_,_/\n"
-            r"      /___/\n"
+        return '\n'.join(
+            (
+                r"   _____",
+                r"  / __(_)__ ___ _  ___  __ __",
+                r" _\ \/ / _ `/  ' \/ _ \/ // /",
+                r"/___/_/\_, /_/_/_/\___/\_,_/"
+                r"      /___/"
+            )
         )
 
     def load_components(self) -> NoReturn:
