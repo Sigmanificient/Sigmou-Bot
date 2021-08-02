@@ -23,15 +23,15 @@ class Logger:
         )
 
     def __call__(self, color, log_type: str, message: str) -> NoReturn:
-        date: str = datetime.now().strftime("%d/%b/%Y:%Hh %Mm %Ss")
+        date: str = datetime.now().strftime("%d/%b/%Y-%Hh:%Mm:%Ss")
 
         with open(self.log_file_path, 'a+') as f:
-            f.write(f"[{date}] {message}\n")
+            f.write(f"[{date}] [{log_type}] {message}\n")
 
         print(
             f"[{colored(date, 'magenta')}]",
             f"[{colored(log_type, color=color)}]",
-            message
+            message, flush=True
         )
 
     @property
