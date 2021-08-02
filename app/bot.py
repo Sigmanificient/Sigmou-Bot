@@ -21,7 +21,6 @@ class Bot(commands.Bot):
             intents=Intents.default()
         )
 
-        print(self)
         Embed.load(self)
 
         self._skip_check = lambda x, y: False
@@ -31,17 +30,6 @@ class Bot(commands.Bot):
         # removing default help command for overriding
         self.remove_command('help')
         self.load_components()
-
-    def __repr__(self) -> str:
-        return '\n'.join(
-            (
-                r"   _____",
-                r"  / __(_)__ ___ _  ___  __ __",
-                r" _\ \/ / _ `/  ' \/ _ \/ // /",
-                r"/___/_/\_, /_/_/_/\___/\_,_/",
-                r"      /___/"
-            )
-        )
 
     def load_components(self) -> NoReturn:
         for file_name in os.listdir("app/cogs"):
