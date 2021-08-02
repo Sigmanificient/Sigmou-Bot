@@ -22,6 +22,18 @@ class Logger:
             sorted(log_files)[-1] if log_files else self.new_file
         )
 
+    def __call__(self, color, log_type: str, message: str) -> NoReturn:
+        date: str = datetime.now().strftime("%d/%b/%Y:%Hh %Mm %Ss")
+
+        with open(self.log_file_path, 'a+') as f:
+            f.write(f"[{date}] {message}\n")
+
+        print(
+            f"[{colored(date, 'magenta')}]",
+            f"[{colored(log_type, color=color)}]",
+            message
+        )
+
     @property
     def new_file(self) -> str:
         return f'{datetime.now():%Y%b%d-%H%M%S}.log'
@@ -38,24 +50,17 @@ class Logger:
 
         return self.new_file
 
-    def __call__(self, message: str, color: str = 'green') -> NoReturn:
-        date: str = f"[{datetime.now():%d/%b/%Y:%Hh %Mm %Ss}]"
+    def success(self, message: str) -> None:
+        self('green', 'Success', message)
 
-        with open(self.log_file_path, 'a+') as f:
-            f.write(f"{date} {message}\n")
+    def inform(self, message: str) -> None:
+        self('blue', 'Info', message)
 
-        print(
-            colored(date, color='blue'),
-            colored(message, color=color)
-        )
+    def warn(self, message: str) -> None:
+        self('yellow', 'Warning', message)
 
-
-def temp_print(message: str) -> NoReturn:
-    print(
-        colored('->', color='magenta'),
-        colored(message.ljust(80, ' '), color='green'), end='\r'
-    )
+    def error(self, message: str) -> None:
+        self('red', 'Error', message)
 
 
-def warn(message: str) -> NoReturn:
-    print(colored('[Warning]', color='red'), colored(message, 'yellow'))
+log = Logger()

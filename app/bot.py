@@ -3,7 +3,7 @@ from typing import NoReturn, Optional
 
 from app.utils.timer import time
 from app.utils.embeds import Embed
-from app.utils.logging import temp_print, warn
+from app.utils.logging import log
 
 import dotenv
 from discord import Activity, ActivityType, Colour, Intents
@@ -38,7 +38,7 @@ class Bot(commands.Bot):
                 r"   _____",
                 r"  / __(_)__ ___ _  ___  __ __",
                 r" _\ \/ / _ `/  ' \/ _ \/ // /",
-                r"/___/_/\_, /_/_/_/\___/\_,_/"
+                r"/___/_/\_, /_/_/_/\___/\_,_/",
                 r"      /___/"
             )
         )
@@ -55,14 +55,14 @@ class Bot(commands.Bot):
             self.load_extension(f"app.cogs.{component_name}")
 
         except commands.ExtensionFailed as error:
-            warn(
+            log.error(
                 f"Could not load component '{component_name}' "
                 f"due to {error.__cause__}"
             )
             return False
 
         else:
-            temp_print(f"loaded {component_name}")
+            log.success(f"loaded {component_name}")
             return True
 
     def run(self) -> NoReturn:
