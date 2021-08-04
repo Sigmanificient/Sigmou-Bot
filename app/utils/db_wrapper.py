@@ -1,7 +1,11 @@
+import os
+
 from app.utils.logging import log
 from typing import Optional, Tuple, Any
 
 import aiosqlite
+
+DB_PATH: str = "app/db.sqlite"
 
 
 class Database:
@@ -9,9 +13,14 @@ class Database:
     __db: Optional[aiosqlite.Connection] = None
 
     @classmethod
-    async def init(cls):
-        cls.__db = await aiosqlite.connect("app/db.sqlite")
+    async def init(cls) -> bool:
+        if not os.path.exists(DB_PATH):
+            log.error("DB not found !")
+            return False
+
+        cls.__db = await aiosqlite.connect(DB_PATH)
         log.success("Connection to the sqlite database is established")
+        return True
 
     async def fetchone(
         self, sql: str, *args: Tuple[Any], default=None
