@@ -1,1 +1,4 @@
 *.template linguist-language=python
+
+*.sqlite linguist-detectable=true
+*.sqlite linguist-language=sqlite
