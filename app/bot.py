@@ -1,6 +1,8 @@
 import os
 from typing import NoReturn, Optional
 
+from discord_components import DiscordComponents
+
 from app.utils.timer import time
 from app.utils.embeds import Embed
 from app.utils.logging import log
@@ -75,6 +77,9 @@ class Bot(commands.Bot):
 
     async def on_connect(self) -> NoReturn:
         self.update_latency.start()
+
+    async def on_ready(self):
+        DiscordComponents(self)
 
     async def process_commands(self, message) -> NoReturn:
         ctx = await self.get_context(message)
