@@ -5,7 +5,7 @@ from typing import Optional, Tuple, Any
 
 import aiosqlite
 
-DB_PATH: str = "app/db.sqlite"
+DB_PATH: str = "app/db/.db"
 
 
 def log_it(method):
