@@ -1,0 +1,11 @@
+create table users
+(
+    id         int     not null
+        constraint a_pk
+            primary key autoincrement,
+    discord_id int(11) not null,
+    point      int default 0
+);
+
+create unique index users_discord_id_uindex
+    on users (discord_id);
