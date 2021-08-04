@@ -22,7 +22,7 @@ class Logger:
             sorted(log_files)[-1] if log_files else self.new_file
         )
 
-    def __call__(self, color, log_type: str, message: str) -> NoReturn:
+    def __log(self, color, log_type: str, message: str) -> NoReturn:
         date: str = datetime.now().strftime("%d/%b/%Y-%Hh:%Mm:%Ss")
 
         with open(self.log_file_path, 'a+') as f:
@@ -51,16 +51,16 @@ class Logger:
         return self.new_file
 
     def success(self, message: str) -> None:
-        self('green', 'Success', message)
+        self.__log('green', 'Success', message)
 
     def inform(self, message: str) -> None:
-        self('blue', 'Info', message)
+        self.__log('blue', 'Info', message)
 
     def warn(self, message: str) -> None:
-        self('yellow', 'Warning', message)
+        self.__log('yellow', 'Warning', message)
 
     def error(self, message: str) -> None:
-        self('red', 'Error', message)
+        self.__log('red', 'Error', message)
 
 
 log = Logger()
