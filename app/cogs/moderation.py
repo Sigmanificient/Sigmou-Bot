@@ -34,7 +34,7 @@ class ModerationCog(commands.Cog):
         delete_amount = limit if limit is not None else 'all'
 
         purge_embed = Embed(ctx)(
-            name="Purge Channel",
+            title="Purge Channel",
             description=(
                 f"Are you sure to delete {delete_amount} messages?\n"
                 "> click the button below to confirm *(timeout in 10s)*"
@@ -64,7 +64,7 @@ class ModerationCog(commands.Cog):
         except asyncio.exceptions.TimeoutError:
             await message.edit(
                 embed=purge_embed(
-                    name="Time Out",
+                    title="Time Out",
                     description=f"**{ctx.author}** did not confirmed the purge"
                 ),
                 components=[]
@@ -75,7 +75,7 @@ class ModerationCog(commands.Cog):
 
         await ctx.send(
             embed=purge_embed(
-                name="Purged !",
+                title="Purged !",
                 description=f"**{ctx.author}** did not confirmed the purge"
             ),
             components=[],
