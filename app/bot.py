@@ -6,6 +6,7 @@ from discord_components import DiscordComponents
 from app.utils.timer import time
 from app.utils.embeds import Embed
 from app.utils.logging import log
+from app.utils.db_wrapper import db
 
 import dotenv
 from discord import Activity, ActivityType, Colour, Intents
@@ -77,6 +78,7 @@ class Bot(commands.Bot):
 
     async def on_connect(self) -> NoReturn:
         self.update_latency.start()
+        await db.init()
 
     async def on_ready(self):
         DiscordComponents(self)
