@@ -24,7 +24,6 @@ class MyTestCase(unittest.TestCase):
     def test_big(self):
         """Checking Timer Performance and Validating."""
         chronos: List[int] = [time() for _ in range(1_000_000)]
-        print(len([x for x in chronos if '.' not in str(x)]), 'valid chronometers')
 
         sleep(1)
 
