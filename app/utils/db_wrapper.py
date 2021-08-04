@@ -8,6 +8,18 @@ import aiosqlite
 DB_PATH: str = "app/db.sqlite"
 
 
+def log_it(method):
+    async def wrapper(self, sql, *args):
+        log.db(f'{method.__name__} with `{sql}` ?= {args}')
+        result = await method(self, sql, *args)
+
+        if result:
+            log.db(f'Query returned {result}')
+            return result
+
+    return wrapper
+
+
 class Database:
     """ An embed of the aio-sqlite database class """
     __db: Optional[aiosqlite.Connection] = None
@@ -22,8 +34,9 @@ class Database:
         log.success("Connection to the sqlite database is established")
         return True
 
+    @log_it
     async def fetchone(
-        self, sql: str, *args: Tuple[Any], default=None
+            self, sql: str, *args: Tuple[Any], default=None
     ) -> Optional[Any]:
         """Return a row from the database or a default value."""
         async with self.__db.execute(sql, args) as cur:
@@ -32,6 +45,7 @@ class Database:
 
         return default
 
+    @log_it
     async def post(self, sql: str, *args: Tuple[Any]):
         """Execute a query and commit."""
         await self.__db.execute(sql, args)

@@ -62,5 +62,8 @@ class Logger:
     def error(self, message: str) -> None:
         self.__log('red', 'Error', message)
 
+    def db(self, message: str) -> None:
+        self.__log('white', 'DB', message)
+
 
 log = Logger()
