@@ -105,7 +105,9 @@ class InfoCog(commands.Cog):
 
         for cog_name, cog in self.client.cogs.items():
             available_commands: List[commands.Command] = [
-                command for command in cog.get_commands() if await self.is_visible(ctx, command)
+                command
+                for command in cog.get_commands()
+                if await self.is_visible(ctx, command)
             ]
 
             if len(available_commands):
@@ -150,7 +152,7 @@ class InfoCog(commands.Cog):
                 )
             ).add_fields(
                 self.client.cogs.items(), checks=len,
-                map_title=lambda cog_name: cog_name.capitalize(),
+                map_title=lambda cog_name: cog_name.capitalize()[:-3],
                 map_values=lambda cog: '  •  '.join(
                     sorted(f'`{c.name}`' for c in cog.get_commands())
                 ),
@@ -164,7 +166,7 @@ class InfoCog(commands.Cog):
         brief="Some data about the panel"
     )
     @commands.is_owner()
-    async def panel_stats(self, ctx) -> None:
+    async def panel_stats(self, ctx: TimedCtx) -> None:
         mb: int = 1024 ** 2
 
         vm = psutil.virtual_memory()
@@ -207,7 +209,7 @@ class InfoCog(commands.Cog):
         aliases=("inv", "i"),
         brief="A link to invite the bot"
     )
-    async def invite(self, ctx: commands.Context) -> None:
+    async def invite(self, ctx: TimedCtx) -> None:
         """Command to get bot invitation link."""
         await ctx.send(
             embed=Embed(ctx)(
