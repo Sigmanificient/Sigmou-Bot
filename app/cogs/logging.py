@@ -3,7 +3,7 @@ from typing import NoReturn
 from discord.ext import commands
 
 from app.bot import Bot
-from app.timed_ctx import TimedCtx
+from app.utils.timed_ctx import TimedCtx
 from app.utils.logging import log
 from app.utils.timer import time
 

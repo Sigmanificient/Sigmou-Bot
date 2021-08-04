@@ -6,7 +6,7 @@ import psutil
 from discord.ext import commands
 
 from app.bot import Bot
-from app.timed_ctx import TimedCtx
+from app.utils.timed_ctx import TimedCtx
 from app.utils.embeds import Embed
 from app.utils.timer import time
 

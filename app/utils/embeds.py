@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 import random
-from time import time as epoch_unix
 from typing import (
     Any, Callable, Dict, Iterable, Optional, Union, TYPE_CHECKING
 )
 
-from app.timed_ctx import TimedCtx
+from app.utils.timed_ctx import TimedCtx
 from app.utils.timer import time
-from app.utils.humanify import pretty_time, pretty_time_small
+from app.utils.humanify import pretty_time_small
 
 if TYPE_CHECKING:
     from app.bot import Bot
