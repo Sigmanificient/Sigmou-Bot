@@ -1,4 +1,4 @@
-from typing import NoReturn
+from typing import NoReturn, Optional
 
 from discord.ext import commands
 
@@ -22,9 +22,12 @@ class ModerationCog(commands.Cog):
         aliases=('clear', 'cls'),
         brief="the sample",
     )
-    async def sample_command(self, ctx: TimedCtx, limit: int = None) -> None:
+    async def purge_command(
+        self, ctx: TimedCtx, limit: Optional[int] = None
+    ) -> None:
         """Clear the number of messages asked. If no number is given,
             clear all message in the channel. """
+
         await ctx.channel.purge(limit=limit)
         await ctx.send("Purged !")
 
