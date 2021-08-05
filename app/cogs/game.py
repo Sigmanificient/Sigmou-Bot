@@ -40,7 +40,7 @@ class GameCog(commands.Cog):
         )
 
     @commands.command(name="daily")
-    @commands.cooldown(1, 8460, commands.BucketType.user)
+    @commands.cooldown(1, 86400, commands.BucketType.user)
     async def daily_command(self, ctx: TimedCtx):
         user = await db.fetchone(
             "select true from users where discord_id = ?", ctx.author.id
