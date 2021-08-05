@@ -63,6 +63,29 @@ class GameCog(commands.Cog):
 
         await ctx.send("You received your daily points, enjoy !")
 
+    @commands.command()
+    async def profile(self, ctx: TimedCtx):
+        user = await db.fetchone(
+            "select true from users where discord_id = ?", ctx.author.id
+        )
+
+        if not user:
+            await ctx.send(
+                embed=Embed(ctx)(
+                    title="Error",
+                    description="You dont have an account !"
+                )
+            )
+
+            return
+
+        point = await db.fetchone(
+            "select point from users where discord_id = ?",
+            ctx.author.id
+        )
+
+        await ctx.send(f"> You are `{point}` points !")
+
 
 def setup(client: Bot) -> NoReturn:
     client.add_cog(GameCog(client))
