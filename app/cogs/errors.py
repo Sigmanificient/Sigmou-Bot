@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 
 from app.bot import Bot
+from app.utils.humanify import pretty_time
 from app.utils.timed_ctx import TimedCtx
 
 
@@ -19,6 +20,14 @@ class LoggingCog(commands.Cog):
         if isinstance(error, discord.ext.commands.BadArgument):
             await ctx.send(
                 "> Une erreur est survenue sur un des paramètres de la commande"
+            )
+
+            return
+
+        if isinstance(error, discord.ext.commands.CommandOnCooldown):
+            await ctx.send(
+                "Your are on cooldown."
+                f" Please wait {pretty_time(error.retry_after)}"
             )
 
             return
