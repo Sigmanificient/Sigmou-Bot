@@ -1,6 +1,6 @@
 create table users
 (
-    id         int     not null
+    id         integer     not null
         constraint a_pk
             primary key autoincrement,
     discord_id int(11) not null,
