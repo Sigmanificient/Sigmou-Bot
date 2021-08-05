@@ -98,6 +98,20 @@ class GameCog(commands.Cog):
             f"have `{point or 0}` points !"
         )
 
+    @commands.command(name="leaderboard", aliases=("ldb", "top"))
+    async def leaderboard(self, ctx: TimedCtx):
+        users = [
+            f"`{await self.client.fetch_user(user)}`: {point:,}"
+            for (user, point) in (
+                await db.fetchall(
+                    "select discord_id, point from users "
+                    "order by point desc limit 10"
+                )
+            )
+        ]
+
+        await ctx.send('\n'.join(users))
+
 
 def setup(client: Bot) -> NoReturn:
     client.add_cog(GameCog(client))
