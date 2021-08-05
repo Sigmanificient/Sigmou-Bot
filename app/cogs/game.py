@@ -1,5 +1,4 @@
 from typing import NoReturn
-
 from discord.ext import commands
 
 from app.bot import Bot
@@ -39,6 +38,30 @@ class GameCog(commands.Cog):
                 description="Your account has just been created !"
             )
         )
+
+    @commands.command(name="daily")
+    @commands.cooldown(1, 8460, commands.BucketType.user)
+    async def daily_command(self, ctx: TimedCtx):
+        user = await db.fetchone(
+            "select true from users where discord_id = ?", ctx.author.id
+        )
+
+        if not user:
+            await ctx.send(
+                embed=Embed(ctx)(
+                    title="Error",
+                    description="You dont have an account !"
+                )
+            )
+
+            return
+
+        await db.post(
+            "UPDATE users SET point = point + 100 WHERE discord_id = ?",
+            ctx.author.id
+        )
+
+        await ctx.send("You received your daily points, enjoy !")
 
 
 def setup(client: Bot) -> NoReturn:
