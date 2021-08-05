@@ -15,7 +15,7 @@ def pretty_time(time: Union[int, float]) -> str:
         time, n = divmod(time, equal)
 
         if n:
-            display_units.append(f'{n}{unit}')
+            display_units.append(f'`{n:.0f}`{unit}')
 
         if not time:
             break
@@ -29,7 +29,7 @@ def pretty_time(time: Union[int, float]) -> str:
     display_units = display_units[::-1]
     end = display_units.pop()
 
-    return ', '.join(display_units) + f' & {end}'
+    return ', '.join(display_units) + f' and {end}'
 
 
 def pretty_time_small(seconds: Union[int, float]) -> str:
