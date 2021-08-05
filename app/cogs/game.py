@@ -1,4 +1,6 @@
 from typing import NoReturn
+
+import discord
 from discord.ext import commands
 
 from app.bot import Bot
@@ -63,28 +65,38 @@ class GameCog(commands.Cog):
 
         await ctx.send("You received your daily points, enjoy !")
 
-    @commands.command()
-    async def profile(self, ctx: TimedCtx):
-        user = await db.fetchone(
-            "select true from users where discord_id = ?", ctx.author.id
+    @commands.command(name="profile", aliases=("p", "me"))
+    async def profile_command(
+            self, ctx: TimedCtx, user: discord.User = None
+    ):
+        if user is None:
+            user = ctx.author
+
+        user_exists = await db.fetchone(
+            "select true from users where discord_id = ?", user.id
         )
 
-        if not user:
+        if not user_exists:
             await ctx.send(
                 embed=Embed(ctx)(
                     title="Error",
-                    description="You dont have an account !"
+                    description=(
+                        f"{'You' if user == ctx.author.id else user} "
+                        "dont have an account !"
+                    )
                 )
             )
 
             return
 
         point = await db.fetchone(
-            "select point from users where discord_id = ?",
-            ctx.author.id
+            "select point from users where discord_id = ?", user.id
         )
 
-        await ctx.send(f"> You are `{point}` points !")
+        await ctx.send(
+            f"> {'You' if user == ctx.author.id else user} "
+            f"have `{point or 0}` points !"
+        )
 
 
 def setup(client: Bot) -> NoReturn:
