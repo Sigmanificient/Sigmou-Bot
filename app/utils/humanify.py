@@ -21,7 +21,7 @@ def pretty_time(time: Union[int, float]) -> str:
             break
 
     else:
-        display_units.append(f'{time}y')
+        display_units.append(f'`{time}`y')
 
     if len(display_units) == 1:
         return display_units[0]

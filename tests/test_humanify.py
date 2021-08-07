@@ -5,16 +5,19 @@ import unittest
 class MyTestCase(unittest.TestCase):
 
     def test_pretty_time(self):
-        self.assertEqual(pretty_time(1),  '1s')
-        self.assertEqual(pretty_time(10), '10s')
+        self.assertEqual(pretty_time(1),  '`1`s')
+        self.assertEqual(pretty_time(10), '`10`s')
 
-        self.assertEqual(pretty_time(60), '1m')
-        self.assertEqual(pretty_time(3600), '1h')
-        self.assertEqual(pretty_time(86400), '1d')
-        self.assertEqual(pretty_time(31536000), '1y')
+        self.assertEqual(pretty_time(60), '`1`m')
+        self.assertEqual(pretty_time(3600), '`1`h')
+        self.assertEqual(pretty_time(86400), '`1`d')
+        self.assertEqual(pretty_time(31536000), '`1`y')
 
-        self.assertEqual(pretty_time(99999999), '3y, 62d, 9h, 46m & 39s')
-        self.assertEqual(pretty_time(31536001), '1y & 1s')
+        self.assertEqual(
+            pretty_time(99999999), '`3`y, `62`d, `9`h, `46`m and `39`s'
+        )
+
+        self.assertEqual(pretty_time(31536001), '`1`y and `1`s')
 
     def test_pretty_time_small(self):
         self.assertEqual(pretty_time_small(0.1), '100.00ms')
