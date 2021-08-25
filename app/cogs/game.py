@@ -15,6 +15,7 @@ class GameCog(commands.Cog):
     def __init__(self, client: Bot):
         """Link to bot instance."""
         self.client: Bot = client
+        Embed.load(self.client)
 
     @commands.command(name="start")
     async def start_command(self, ctx: TimedCtx):

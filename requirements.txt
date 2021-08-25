@@ -9,3 +9,4 @@ psutil~=5.8.0
 py-cpuinfo~=8.0.0
 
 aiosqlite~=0.17.0
+embed-templator>=1.0.3

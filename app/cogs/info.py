@@ -17,6 +17,7 @@ class InfoCog(commands.Cog):
     def __init__(self, client: Bot):
         """Link to bot instance."""
         self.client: Bot = client
+        Embed.load(self.client)
 
         # Preloading file content
         self.files_info: Dict[str, str] = {}

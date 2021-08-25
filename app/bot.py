@@ -1,16 +1,14 @@
 import os
 from typing import NoReturn, Optional
 
-from discord_components import DiscordComponents
-
-from app.utils.timer import time
-from app.utils.embeds import Embed
-from app.utils.logging import log
-from app.utils.db_wrapper import db
-
 import dotenv
 from discord import Activity, ActivityType, Colour, Intents
 from discord.ext import commands, tasks
+from discord_components import DiscordComponents
+
+from app.utils.db_wrapper import db
+from app.utils.logging import log
+from app.utils.timer import time
 
 
 class Bot(commands.Bot):
@@ -23,8 +21,6 @@ class Bot(commands.Bot):
             owner_ids=(812699388815605791, 856491941184536597),
             intents=Intents.default()
         )
-
-        Embed.load(self)
 
         self._skip_check = lambda x, y: False
         self.colour: Colour = Colour(0xCE1A28)
