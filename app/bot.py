@@ -30,7 +30,7 @@ class Bot(Client):
 
         # removing default help command for overriding
         # self.remove_command('help')
-        # self.load_components()
+        self.load_components()
 
     def load_components(self) -> NoReturn:
         for file_name in os.listdir("app/cogs"):
@@ -41,7 +41,7 @@ class Bot(Client):
 
     def load_component(self, component_name: str) -> bool:
         try:
-            self.load_extension(f"app.cogs.{component_name}")
+            self.load_cog(f"app.cogs.{component_name}")
 
         except commands.ExtensionFailed as error:
             log.error(

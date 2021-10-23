@@ -58,5 +58,4 @@ class OtherCog(commands.Cog):
         await ctx.send("> Ended", reference=ctx.message)
 
 
-def setup(client: Bot):
-    client.add_cog(OtherCog(client))
+setup = OtherCog

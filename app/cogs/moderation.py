@@ -84,5 +84,4 @@ class ModerationCog(commands.Cog):
         )
 
 
-def setup(client: Bot) -> NoReturn:
-    client.add_cog(ModerationCog(client))
+setup = ModerationCog

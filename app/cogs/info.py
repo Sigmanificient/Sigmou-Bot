@@ -225,5 +225,4 @@ class InfoCog(commands.Cog):
         )
 
 
-def setup(client: Bot) -> NoReturn:
-    client.add_cog(InfoCog(client))
+setup = InfoCog

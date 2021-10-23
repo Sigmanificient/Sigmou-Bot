@@ -34,5 +34,4 @@ class LoggingCog(commands.Cog):
         )
 
 
-def setup(client: Bot) -> NoReturn:
-    client.add_cog(LoggingCog(client))
+setup = LoggingCog

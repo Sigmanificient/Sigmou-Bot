@@ -37,5 +37,4 @@ class LoggingCog(commands.Cog):
         await ctx.send(f"```{error!r}```")
 
 
-def setup(client: Bot) -> NoReturn:
-    client.add_cog(LoggingCog(client))
+setup = LoggingCog

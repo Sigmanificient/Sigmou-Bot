@@ -114,5 +114,4 @@ class GameCog(commands.Cog):
         await ctx.send('\n'.join(users))
 
 
-def setup(client: Bot) -> NoReturn:
-    client.add_cog(GameCog(client))
+setup = GameCog
