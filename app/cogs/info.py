@@ -4,6 +4,8 @@ from typing import Dict, Tuple, NoReturn, List
 
 import psutil
 from discord.ext import commands
+from pincer import command
+from pincer.objects import Embed as p_Embed
 
 from app.bot import Bot
 from app.utils.timed_ctx import TimedCtx
@@ -205,22 +207,21 @@ class InfoCog(commands.Cog):
             )
         )
 
-    @commands.command(
+    @command(
         name="invite",
-        aliases=("inv", "i"),
-        brief="A link to invite the bot"
+        guild=857336281583059005
+        # aliases=("inv", "i"),
+        # brief="A link to invite the bot"
     )
-    async def invite(self, ctx: TimedCtx) -> None:
+    async def invite(self) -> p_Embed:
         """Command to get bot invitation link."""
-        await ctx.send(
-            embed=Embed(ctx)(
-                title="Invite the Bot !",
-                description=(
-                    "> Click this link to invite this bot on your servers !\n"
-                    "You need to have the required permissions on the server.\n"
-                    "[invite me now](https://discord.com/api/oauth2/authorize\n"
-                    f"?client_id={self.client.user.id}&permissions=8&scope=bot)"
-                )
+        return p_Embed(
+            title="Invite the Bot !",
+            description=(
+                "> Click this link to invite this bot on your servers !\n"
+                "You need to have the required permissions on the server.\n"
+                "[invite me now](https://discord.com/api/oauth2/authorize"
+                f"?client_id={self.client.bot}&permissions=8&scope=bot)"
             )
         )
 
