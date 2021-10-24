@@ -163,13 +163,12 @@ class InfoCog(commands.Cog):
             )
         )
 
-    @commands.command(
+    @command(
         name="panel",
-        aliases=('pan',),
-        brief="Some data about the panel"
+        # aliases=('pan',),
+        # brief="Some data about the panel"
     )
-    @commands.is_owner()
-    async def panel_stats(self, ctx: TimedCtx) -> None:
+    async def panel_stats(self) -> p_Embed:
         mb: int = 1024 ** 2
 
         vm = psutil.virtual_memory()
@@ -194,16 +193,14 @@ class InfoCog(commands.Cog):
             )
         }
 
-        await ctx.send(
-            embed=Embed(ctx)(
-                title="Server Report",
-                description="The bot is hosted on a private vps."
-            ).add_fields(
-                stats.items(),
-                map_title=lambda name: name.upper(),
-                map_values=lambda percent, info, unit: (
-                    f"> `{percent:.3f}` **%**\n- `{info}` **{unit}**"
-                )
+        return p_Embed(
+            title="Server Report",
+            description="The bot is hosted on a private vps."
+        ).add_fields(
+            stats.items(),
+            map_title=lambda name: name.upper(),
+            map_values=lambda percent, info, unit: (
+                f"> `{percent:.3f}` **%**\n- `{info}` **{unit}**"
             )
         )
 
