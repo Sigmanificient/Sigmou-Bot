@@ -16,22 +16,9 @@ class LoggingCog(commands.Cog):
         self.client: Bot = client
 
     @commands.Cog.listener()
-    async def on_connect(self) -> None:
-        connect_time: float = time("start", keep=True)
-        log.inform(
-            f'Logged in as {self.client.user} after {connect_time:,.3f}s'
-        )
-
-    @commands.Cog.listener()
     async def on_ready(self) -> None:
         ready_time: float = time("start", keep=True)
         log.inform(f'Ready after {ready_time:,.3f}s')
-
-    @commands.Cog.listener()
-    async def on_command_completion(self, ctx: TimedCtx) -> None:
-        log.success(
-            f"Successfully completed {ctx.command.name} by {ctx.author}"
-        )
 
 
 setup = LoggingCog

@@ -136,7 +136,6 @@ class InfoCog(commands.Cog):
             )
         )
 
-
     @command(
         name="panel",
         guild=TEST_GUILD_ID
