@@ -8,6 +8,7 @@ from pincer import command
 from pincer.objects import Embed as p_Embed
 
 from app.bot import Bot
+from app.constants import TEST_GUILD_ID
 from app.utils.timed_ctx import TimedCtx
 from app.utils.embeds import Embed
 from app.utils.timer import time
@@ -135,36 +136,10 @@ class InfoCog(commands.Cog):
             )
         )
 
-    @commands.command(
-        name='cmds',
-        aliases=('all', 'all_cmds'),
-        brief="List every command osf the bot"
-    )
-    async def all_commands(self, ctx: TimedCtx) -> None:
-        """
-        Provide a list of every command available command for the user,
-        split by extensions and organized in alphabetical order.
-        Will not show the event-only extension
-        """
-        await ctx.send(
-            embed=Embed(ctx)(
-                title='All commands',
-                description=(
-                    f"> `{len(self.client.commands)}` "
-                    "commands available"
-                )
-            ).add_fields(
-                self.client.cogs.items(), checks=len,
-                map_title=lambda cog_name: cog_name.capitalize()[:-3],
-                map_values=lambda cog: '  •  '.join(
-                    sorted(f'`{c.name}`' for c in cog.get_commands())
-                ),
-                inline=False
-            )
-        )
 
     @command(
         name="panel",
+        guild=TEST_GUILD_ID
         # aliases=('pan',),
         # brief="Some data about the panel"
     )
@@ -206,7 +181,7 @@ class InfoCog(commands.Cog):
 
     @command(
         name="invite",
-        guild=857336281583059005
+        guild=TEST_GUILD_ID
         # aliases=("inv", "i"),
         # brief="A link to invite the bot"
     )
