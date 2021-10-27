@@ -7,7 +7,6 @@ from pincer.objects import Embed as p_Embed
 
 from app.bot import Bot
 from app.constants import TEST_GUILD_ID
-from app.utils.embeds import Embed
 
 
 class InfoCog:
@@ -16,7 +15,6 @@ class InfoCog:
     def __init__(self, client: Bot):
         """Link to bot instance."""
         self.client: Bot = client
-        Embed.load(self.client)
 
         # Preloading file content
         self.files_info: Dict[str, str] = {}

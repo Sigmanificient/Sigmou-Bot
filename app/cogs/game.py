@@ -4,16 +4,13 @@ from pincer.objects import Embed as p_Embed, User
 from app.bot import Bot
 from app.constants import TEST_GUILD_ID
 from app.utils.db_wrapper import db
-from app.utils.embeds import Embed
 
 
 class GameCog:
     """Game commands."""
-
     def __init__(self, client: Bot):
         """Link to bot instance."""
         self.client: Bot = client
-        Embed.load(self.client)
 
     @command(name="start", guild=TEST_GUILD_ID)
     async def start_command(self, ctx):
@@ -29,11 +26,9 @@ class GameCog:
 
         await db.post("insert into users(discord_id) values (?)", ctx.author.user.id)
 
-        await ctx.send(
-            embed=Embed(ctx)(
-                title="Welcome !",
-                description="Your account has just been created !"
-            )
+        return p_Embed(
+            title="Welcome !",
+            description="Your account has just been created !"
         )
 
     @command(name="daily", cooldown=1, cooldown_scale=84600, guild=TEST_GUILD_ID)
@@ -58,7 +53,7 @@ class GameCog:
     @command(name="profile", guild=TEST_GUILD_ID)
     async def profile_command(self, ctx, user: User = None):
         if user is None:
-            user = ctx.author.user
+            user: User = ctx.author.user
 
         user_exists = await db.fetchone(
             "select true from users where discord_id = ?", user.id

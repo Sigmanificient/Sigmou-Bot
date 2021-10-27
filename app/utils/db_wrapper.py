@@ -1,9 +1,9 @@
 import os
-
-from app.utils.logging import log
-from typing import Optional, Tuple, Any, Iterable
+from typing import Optional, Any, Iterable
 
 import aiosqlite
+
+from app.utils.logging import log
 
 DB_PATH: str = "app/db/.db"
 
@@ -36,7 +36,7 @@ class Database:
 
     @log_it
     async def fetchone(
-        self, sql: str, *args: Tuple[Any], default=None
+        self, sql: str, *args: Any, default=None
     ) -> Optional[Any]:
         """Return a row from the database or a default value."""
         async with self.__db.execute(sql, args) as cur:
@@ -46,13 +46,13 @@ class Database:
         return default
 
     async def fetchall(
-        self, sql: str, *args: Tuple[Any]
+        self, sql: str, *args: Any
     ) -> Iterable[Any]:
         async with self.__db.execute(sql, args) as cur:
             return await cur.fetchall()
 
     @log_it
-    async def post(self, sql: str, *args: Tuple[Any]):
+    async def post(self, sql: str, *args: Any):
         """Execute a query and commit."""
         await self.__db.execute(sql, args)
         await self.__db.commit()
