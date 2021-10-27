@@ -36,24 +36,6 @@ class InfoCog(commands.Cog):
 
         self.files_info['Total'] = "\n".join(self.files_info.values())
 
-    @staticmethod
-    async def is_visible(ctx: TimedCtx, command: commands.Command) -> bool:
-        """Check whether a command is visible for an user"""
-        if not len(command.checks):
-            return True
-
-        for check in command.checks:
-            try:
-                if inspect.iscoroutinefunction(check):
-                    await check(ctx)
-                else:
-                    check(ctx)
-
-            except commands.errors.CheckFailure:
-                return False
-
-        return True
-
     @commands.command(
         name="ping",
         description="Return Bot Latency",
@@ -95,44 +77,6 @@ class InfoCog(commands.Cog):
                     f"`{len(file)}` characters"
                     f"\n `{len(file.splitlines())}` lines"
                 ),
-            )
-        )
-
-    @commands.command(
-        name="help",
-        description="A command to find ever information about an other command",
-        brief="The global help command"
-    )
-    async def help_command_default(self, ctx: TimedCtx) -> None:
-        all_commands: Dict[str: List[commands.Command]] = {}
-        total: int = 0
-
-        for cog_name, cog in self.client.cogs.items():
-            available_commands: List[commands.Command] = [
-                command
-                for command in cog.get_commands()
-                if await self.is_visible(ctx, command)
-            ]
-
-            if len(available_commands):
-                all_commands[cog_name] = available_commands.copy()
-                total += len(available_commands)
-
-        aliases: int = len(self.client.all_commands) - len(self.client.commands)
-
-        await ctx.send(
-            embed=Embed(ctx)(
-                title=f"General Help {self.client.user.name}",
-                description=(
-                    f"- `{total}`/`{len(self.client.commands)}` "
-                    f"available commands\n`{aliases}` aliases"
-                )
-            ).add_fields(
-                all_commands,
-                map_values=lambda cog_commands: ', '.join(
-                    f"`{command.name}`" for command in cog_commands
-                ),
-                inline=False
             )
         )
 
