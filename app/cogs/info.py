@@ -1,20 +1,16 @@
-import inspect
 from os import listdir
-from typing import Dict, Tuple, NoReturn, List
+from typing import Dict, Tuple
 
 import psutil
-from discord.ext import commands
 from pincer import command
 from pincer.objects import Embed as p_Embed
 
 from app.bot import Bot
 from app.constants import TEST_GUILD_ID
-from app.utils.timed_ctx import TimedCtx
 from app.utils.embeds import Embed
-from app.utils.timer import time
 
 
-class InfoCog(commands.Cog):
+class InfoCog:
     """A simple commands cog template."""
 
     def __init__(self, client: Bot):
@@ -36,48 +32,23 @@ class InfoCog(commands.Cog):
 
         self.files_info['Total'] = "\n".join(self.files_info.values())
 
-    @commands.command(
-        name="ping",
-        description="Return Bot Latency",
-        brief="Ping command"
-    )
-    async def ping_command(self, ctx: TimedCtx) -> None:
-        """Return Bot Latency."""
-        t: str = time()
-
-        ping_embed = Embed(ctx)(title="Pong !").add_field(
-            name="Api latency",
-            value=f"> `{self.client.latency * 1000:.3f}` ms"
-        )
-
-        message = await ctx.send(embed=ping_embed)
-
-        await message.edit(
-            embed=ping_embed.add_field(
-                name="Client latency",
-                value=f"> `{time(t) * 1000:,.3f}` ms"
+    @command(name="code_stats", guild=TEST_GUILD_ID)
+    async def code_command(self) -> p_Embed:
+        return p_Embed(
+            title="Code Structure",
+            description=(
+                "> This is the whole code structure of "
+                f"{self.client.bot.username}!"
             )
-        )
-
-    @commands.command(name="code")
-    async def code_command(self, ctx: TimedCtx) -> None:
-        await ctx.send(
-            embed=Embed(ctx)(
-                title="Code Structure",
-                description=(
-                    "> This is the whole code structure of "
-                    f"{self.client.user.name}!"
-                )
-            ).add_fields(
-                self.files_info,
-                map_title=lambda name: (
-                    f"📝 {name}" if name != "Total" else "📊 Total"
-                ),
-                map_values=lambda file: (
-                    f"`{len(file)}` characters"
-                    f"\n `{len(file.splitlines())}` lines"
-                ),
-            )
+        ).add_fields(
+            self.files_info,
+            map_title=lambda name: (
+                f"📝 {name}" if name != "Total" else "📊 Total"
+            ),
+            map_values=lambda file: (
+                f"`{len(file)}` characters"
+                f"\n `{len(file.splitlines())}` lines"
+            ),
         )
 
     @command(
