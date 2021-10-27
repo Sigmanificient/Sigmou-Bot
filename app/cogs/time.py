@@ -1,61 +1,62 @@
 import asyncio
 from typing import Union
 
-from discord.ext import commands
+from pincer import command
 
 from app.bot import Bot
-from app.utils.timed_ctx import TimedCtx
+from app.constants import TEST_GUILD_ID
 from app.utils.timer import time
 
 
-class OtherCog(commands.Cog):
+class OtherCog:
     """Gizmos and Gadget i dont know where to put."""
 
     def __init__(self, client: Bot):
         """Link to bot instance."""
         self.client: Bot = client
 
-    @commands.command(
-        name="chrono",
+    @command(
+        name="chronometer",
         description=(
-            "A simple chronometer commands that start on first call, "
-            "then give time elapsed. "
+                "A simple chronometer commands that start on first call, "
+                "then give time elapsed. "
         ),
-        aliases=('ch', 'cn'),
-        brief="A simple chronometer",
+        guild=TEST_GUILD_ID
     )
-    async def chronometer_command(self, ctx: TimedCtx) -> None:
+    async def chronometer_command(self, ctx) -> str:
         """Clear the number of messages asked.
         If no number is given, clear all message in the channel."""
-        t: Union[str, float] = time(ctx.author.id)
+
+        t: Union[str, float] = time(ctx.author.user.id)
+
         if isinstance(t, float):
-            await ctx.send(f"Timer ended: `{t:,.3f}s`")
-            return
+            return f"Timer ended: `{t:,.3f}s`"
 
-        await ctx.send("Timer started...")
+        return "Timer started..."
 
-    @commands.command(
+    @command(
         name="lap",
         description=(
-            "A command that give the current chronometer time of an user "
-            "without stopping it. "
+                "A command that give the current chronometer time of an user "
+                "without stopping it. "
         ),
-        brief="chronometer lap"
+        guild=TEST_GUILD_ID
     )
-    async def lap_command(self, ctx: TimedCtx) -> None:
+    async def lap_command(self, ctx) -> str:
         """give the current time of a timer without destroying it."""
-        t: Union[bool, float] = time(ctx.author.id, keep=True, create=False)
-        await ctx.send(f"`{t:,.3f}s`" if t else "You dont have any timer")
+        t: Union[bool, float] = time(ctx.author.user.id, keep=True, create=False)
+        return f"`{t:,.3f}s`" if t else "You dont have any timer"
 
-    @commands.command(
+    @command(
         name="timer",
         description="A command that wait the given time then ping the user.",
-        brief="A simple timer command"
+        guild=TEST_GUILD_ID
     )
-    async def timer_command(self, ctx: TimedCtx, seconds: int) -> None:
+    async def timer_command(self, seconds: int) -> str:
         """A simple timer that ping you at end"""
+        yield "started..."
         await asyncio.sleep(seconds)
-        await ctx.send("> Ended", reference=ctx.message)
+        yield "> Ended"
 
 
 setup = OtherCog

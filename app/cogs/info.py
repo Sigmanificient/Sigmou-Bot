@@ -83,8 +83,6 @@ class InfoCog(commands.Cog):
     @command(
         name="panel",
         guild=TEST_GUILD_ID
-        # aliases=('pan',),
-        # brief="Some data about the panel"
     )
     async def panel_stats(self) -> p_Embed:
         mb: int = 1024 ** 2
