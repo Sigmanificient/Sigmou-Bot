@@ -7,6 +7,7 @@ from pincer.exceptions import CogError
 
 from app.utils.db_wrapper import db
 from app.utils.logging import log
+from app.utils.timer import time
 
 
 class Bot(Client):
@@ -50,4 +51,6 @@ class Bot(Client):
 
     @Client.event
     async def on_ready(self):
+        ready_time: float = time("start", keep=True)
+        log.inform(f'Ready after {ready_time:,.3f}s')
         await db.init()
