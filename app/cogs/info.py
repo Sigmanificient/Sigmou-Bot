@@ -3,7 +3,7 @@ from typing import Dict, Tuple
 
 import psutil
 from pincer import command
-from pincer.objects import Embed as p_Embed
+from pincer.objects import Embed
 
 from app.bot import Bot
 from app.constants import TEST_GUILD_ID
@@ -31,8 +31,8 @@ class InfoCog:
         self.files_info['Total'] = "\n".join(self.files_info.values())
 
     @command(name="code_stats", guild=TEST_GUILD_ID)
-    async def code_command(self) -> p_Embed:
-        return p_Embed(
+    async def code_command(self) -> Embed:
+        return Embed(
             title="Code Structure",
             description=(
                 "> This is the whole code structure of "
@@ -53,7 +53,7 @@ class InfoCog:
         name="panel",
         guild=TEST_GUILD_ID
     )
-    async def panel_stats(self) -> p_Embed:
+    async def panel_stats(self) -> Embed:
         mb: int = 1024 ** 2
 
         vm = psutil.virtual_memory()
@@ -78,7 +78,7 @@ class InfoCog:
             )
         }
 
-        return p_Embed(
+        return Embed(
             title="Server Report",
             description="The bot is hosted on a private vps."
         ).add_fields(
@@ -95,9 +95,9 @@ class InfoCog:
         # aliases=("inv", "i"),
         # brief="A link to invite the bot"
     )
-    async def invite(self) -> p_Embed:
+    async def invite(self) -> Embed:
         """Command to get bot invitation link."""
-        return p_Embed(
+        return Embed(
             title="Invite the Bot !",
             description=(
                 "> Click this link to invite this bot on your servers !\n"

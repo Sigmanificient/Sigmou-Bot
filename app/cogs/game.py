@@ -1,5 +1,5 @@
 from pincer import command
-from pincer.objects import Embed as p_Embed, User
+from pincer.objects import Embed, User
 
 from app.bot import Bot
 from app.constants import TEST_GUILD_ID
@@ -19,14 +19,14 @@ class GameCog:
         )
 
         if user:
-            return p_Embed(
+            return Embed(
                 title="Error",
                 description="You already have an account !"
             )
 
         await db.post("insert into users(discord_id) values (?)", ctx.author.user.id)
 
-        return p_Embed(
+        return Embed(
             title="Welcome !",
             description="Your account has just been created !"
         )
@@ -38,7 +38,7 @@ class GameCog:
         )
 
         if not user:
-            return p_Embed(
+            return Embed(
                 title="Error",
                 description="You dont have an account !"
             )
@@ -60,7 +60,7 @@ class GameCog:
         )
 
         if not user_exists:
-            return p_Embed(
+            return Embed(
                 title="Error",
                 description=(
                     f"{'You' if user.id == ctx.author.user.id else user} "
