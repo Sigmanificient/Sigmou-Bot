@@ -54,54 +54,10 @@ class Bot(Client):
             log.success(f"loaded {component_name}")
             return True
 
-    def unload_component(self, component_name: str) -> bool:
-        try:
-            self.unload_extension(f"app.cogs.{component_name}")
-
-        except commands.ExtensionFailed as error:
-            log.error(
-                f"Could not unload component '{component_name}' "
-                f"due to {error.__cause__}"
-            )
-            return False
-
-        else:
-            log.success(f"unloaded {component_name}")
-            return True
-
-    # def run(self) -> NoReturn:
-    #     time("start")
-    #     super().run(self.token)
-
     @property
     def token(self) -> Optional[str]:
-        # if self.is_ready():
-        #    return
-
         return dotenv.dotenv_values(".env").get('TOKEN')
 
-    @tasks.loop(seconds=30)
-    async def update_latency(self) -> None:
-        await self.change_presence(
-            activity=Activity(
-                type=ActivityType.watching,
-                name=f"{self.base_prefix}help | {self.latency * 1000:,.3f} ms"
-            )
-        )
-
-    async def on_connect(self) -> NoReturn:
-        self.update_latency.start()
-        db_conn = await db.init()
-
-        if not db_conn:
-            log.warn("unloading db connected cogs.")
-            self.unload_component("game")
-
+    @Client.event
     async def on_ready(self):
-        DiscordComponents(self)
-
-    async def process_commands(self, message) -> NoReturn:
-        ctx = await self.get_context(message)
-        ctx.time = time()
-
-        await self.invoke(ctx)
+        await db.init()
