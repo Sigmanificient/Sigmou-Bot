@@ -1,6 +1,6 @@
 import logging
-from app.bot import Bot
-from app.utils.timer import time
+from sigmou.bot import Bot
+from sigmou.utils.timer import time
 
 logging.basicConfig(level=logging.DEBUG)
 

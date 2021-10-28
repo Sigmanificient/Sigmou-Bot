@@ -1,4 +1,4 @@
-from app.utils.humanify import pretty_time, pretty_time_small
+from sigmou.utils.humanify import pretty_time, pretty_time_small
 import unittest
 
 

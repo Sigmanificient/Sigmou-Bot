@@ -1,7 +1,7 @@
 from time import sleep
 from typing import List
 
-from app.utils.timer import time
+from sigmou.utils.timer import time
 import unittest
 
 FIXED_SIZE: int = 1_000_000

@@ -8,7 +8,7 @@ from termcolor import colored
 colorama.init()
 
 MAX_LOG_SIZE: int = 8 * 1024 * 1024
-LOGS_DIR: str = 'app/logs/'
+LOGS_DIR: str = 'sigmou/logs/'
 
 
 class Logger:

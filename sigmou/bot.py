@@ -5,9 +5,9 @@ import dotenv
 from pincer import Client, Intents
 from pincer.exceptions import CogError
 
-from app.utils.db_wrapper import db
-from app.utils.logging import log
-from app.utils.timer import time
+from sigmou.utils.db_wrapper import db
+from sigmou.utils.logging import log
+from sigmou.utils.timer import time
 
 
 class Bot(Client):
@@ -24,7 +24,7 @@ class Bot(Client):
         self.load_components()
 
     def load_components(self) -> NoReturn:
-        for file_name in os.listdir("app/cogs"):
+        for file_name in os.listdir("sigmou/cogs"):
             if not file_name.endswith("py"):
                 continue
 
@@ -32,7 +32,7 @@ class Bot(Client):
 
     def load_component(self, component_name: str) -> bool:
         try:
-            self.load_cog(f"app.cogs.{component_name}")
+            self.load_cog(f"sigmou.cogs.{component_name}")
 
         except CogError as error:
             log.error(

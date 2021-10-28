@@ -3,9 +3,9 @@ from typing import Optional, Any, Iterable
 
 import aiosqlite
 
-from app.utils.logging import log
+from sigmou.utils.logging import log
 
-DB_PATH: str = "app/db/.db"
+DB_PATH: str = "sigmou/db/.db"
 
 
 def log_it(method):

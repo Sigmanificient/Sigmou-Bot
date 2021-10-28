@@ -3,9 +3,9 @@ from typing import Union
 
 from pincer import command
 
-from app.bot import Bot
-from app.constants import TEST_GUILD_ID
-from app.utils.timer import time
+from sigmou.bot import Bot
+from sigmou.constants import TEST_GUILD_ID
+from sigmou.utils.timer import time
 
 
 class OtherCog:

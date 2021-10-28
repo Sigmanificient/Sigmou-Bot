@@ -5,8 +5,8 @@ import psutil
 from pincer import command
 from pincer.objects import Embed
 
-from app.bot import Bot
-from app.constants import TEST_GUILD_ID
+from sigmou.bot import Bot
+from sigmou.constants import TEST_GUILD_ID
 
 
 class InfoCog:
@@ -19,7 +19,7 @@ class InfoCog:
         # Preloading file content
         self.files_info: Dict[str, str] = {}
 
-        folders: Tuple[str, ...] = (".", "app", "app/cogs")
+        folders: Tuple[str, ...] = (".", "sigmou", "sigmou/cogs")
 
         for file, path in {
             _f: path for path in folders

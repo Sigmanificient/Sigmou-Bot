@@ -1,9 +1,9 @@
 from pincer import command
 from pincer.objects import Embed, User
 
-from app.bot import Bot
-from app.constants import TEST_GUILD_ID
-from app.utils.db_wrapper import db
+from sigmou.bot import Bot
+from sigmou.constants import TEST_GUILD_ID
+from sigmou.utils.db_wrapper import db
 
 
 class GameCog:
