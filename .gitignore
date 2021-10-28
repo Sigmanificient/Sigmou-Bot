@@ -10,3 +10,7 @@ dev.py
 
 # Coverage results
 .coverage
+
+# Packaging
+*.egg-info
+
