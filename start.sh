@@ -5,17 +5,16 @@ if [[ -d .git ]]; then
 fi
 
 # Setup environment
-if ![[ -d venv ]]; then
+if ! [[ -d venv ]]; then
   python -m venv venv
 
   # Installing dependencies
-  venv/bin/pip install -U --target /home/container/venv/lib/python3.8/site-packages/ -r requirements.txt
-
-  # Installing bot as package
-  cd /home/container/
-  venv/bin/pip install -e /home/container
-
+  venv/bin/pip install -U --target ./venv/lib/python3.*/site-packages/ -r requirements.txt
 fi
 
+
+# Installing bot as package
+venv/bin/pip install -e .
+
 # Starting the bot
-/home/container/venv/bin/python /home/container/sigmou/__main__.py
+venv/bin/python ./sigmou/__main__.py
