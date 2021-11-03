@@ -1,3 +1,5 @@
+import logging
+
 from sigmou.bot import Bot
 from sigmou.utils.timer import time
 
