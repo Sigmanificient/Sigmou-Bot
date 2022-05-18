@@ -34,8 +34,11 @@ def pretty_time(time: Union[int, float]) -> str:
 
 def pretty_time_small(seconds: Union[int, float]) -> str:
     """Format a sub second time to a human readable string."""
-    for unit, eq in sub_second_unit.items():
-        if eq < seconds:
-            return f"{seconds / eq:,.2f}{unit}"
-
-    return '0s'
+    return next(
+        (
+            f"{seconds / eq:,.2f}{unit}"
+            for unit, eq in sub_second_unit.items()
+            if eq < seconds
+        ),
+        '0s',
+    )
