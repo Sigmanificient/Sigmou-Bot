@@ -16,7 +16,7 @@ def time(
         key: float = random.random()
 
     if key in keys:
-        t_key: float = keys.pop(key) if not keep else keys[key]
+        t_key: float = keys[key] if keep else keys.pop(key)
         return perf_counter() - t_key
 
     if create:
