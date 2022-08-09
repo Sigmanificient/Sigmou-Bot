@@ -1,4 +1,4 @@
-pincer~=0.16.0
+pincer~=0.16.1
 psutil~=5.9.1
 colorama~=0.4.5
 termcolor~=1.1.0
