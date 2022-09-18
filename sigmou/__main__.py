@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 def main():
     time("start", keep=True)
-    bot: Bot = Bot(prefix="=")
+    bot: Bot = Bot()
     bot.run()
 
 
