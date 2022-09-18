@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 from typing import TYPE_CHECKING, Union
 
 from discord import app_commands, Interaction
@@ -22,7 +21,7 @@ class TimeCommandsGroup(app_commands.Group, name="time"):
             "then give time elapsed. "
         )
     )
-    async def chronometer_command(self, interaction: Interaction) -> str:
+    async def chronometer_command(self, interaction: Interaction):
         """Clear the number of messages asked.
         If no number is given, clear all message in the channel."""
 
@@ -41,7 +40,7 @@ class TimeCommandsGroup(app_commands.Group, name="time"):
             "without stopping it. "
         )
     )
-    async def lap_command(self, interaction: Interaction) -> str:
+    async def lap_command(self, interaction: Interaction):
         """give the current time of a timer without destroying it."""
         t: Union[bool, float] = time(
             interaction.user.id,
@@ -52,16 +51,6 @@ class TimeCommandsGroup(app_commands.Group, name="time"):
         await interaction.response.send_message(
             f"`{t:,.3f}s`" if t else "You dont have any timer"
         )
-
-    @app_commands.command(
-        name="timer",
-        description="A command that wait the given time then ping the user."
-    )
-    async def timer_command(self, interaction):
-        """A simple timer that ping you at end"""
-        await interaction.response.send_message("started...")
-        await asyncio.sleep(interaction.time)
-        await interaction.response.send_message("> Ended!")
 
 
 async def setup(client: commands.Bot):

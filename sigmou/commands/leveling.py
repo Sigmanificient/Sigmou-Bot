@@ -1,14 +1,13 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
-from discord import app_commands, Interaction, Embed
+from discord import app_commands, Interaction, Embed, Member, User
 from discord.ext import commands
 
 if TYPE_CHECKING:
     from sigmou.bot import Bot
 
-from sigmou.constants import TEST_GUILD_ID
 from sigmou.utils.db_wrapper import db
 
 
@@ -43,34 +42,12 @@ class GameCommandsGroup(app_commands.Group, name="game"):
             )
         )
 
-    @app_commands.command(name="daily")
-    async def daily_command(self, interaction: Interaction):
-        user = await db.fetchone(
-            "select true from users where discord_id = ?",
-            interaction.user.id
-        )
-
-        if not user:
-            await interaction.response.send_message(
-                embed=Embed(
-                    title="Error",
-                    description="You dont have an account !"
-                )
-            )
-            return
-
-        await db.post(
-            "UPDATE users SET point = point + 100 WHERE discord_id = ?",
-            interaction.user.id,
-        )
-
-        await interaction.response.send_message(
-            "You received your daily points, enjoy !"
-        )
-
     @app_commands.command(name="profile")
-    async def profile_command(self, interaction: Interaction):
-        user = interaction.user
+    async def profile_command(
+        self, interaction: Interaction,
+        user: Optional[User] = None
+    ):
+        user = interaction.user if user is None else user
 
         user_exists = await db.fetchone(
             "select true from users where discord_id = ?", user.id
@@ -101,12 +78,12 @@ class GameCommandsGroup(app_commands.Group, name="game"):
     async def leaderboard(self, interaction: Interaction):
         await interaction.response.send_message(
             "\n".join(
-                f"`{await self.client.get_user(user)}`: {point:,}"
-                for (user, point) in (
+                f"`{c}` - {interaction.client.get_user(user)} - {point:,}"
+                for c, (user, point) in enumerate(
                     await db.fetchall(
                         "select discord_id, point from users "
                         "order by point desc limit 10"
-                    )
+                    ), start=1
                 )
             )
         )

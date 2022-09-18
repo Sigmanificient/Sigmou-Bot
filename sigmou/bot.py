@@ -2,10 +2,13 @@ import os
 from logging import getLogger
 from typing import Dict
 
+import discord
 import dotenv
 from discord import Intents
 from discord.ext import commands
 
+from sigmou.events import events
+from sigmou.injection import client_injection
 from sigmou.utils.db_wrapper import db
 from sigmou.utils.timer import time
 
@@ -20,25 +23,20 @@ class Bot(commands.Bot):
         self.__cogs: Dict[str, object] = {}
         self.remove_command("help")
 
-    async def on_connect(self):
-        ready_time: float = time("start", keep=True)
-        logger.info(f"Logged In as {self} after {ready_time:,.3f}s")
-
-        await db.init()
-        await self.load_extensions()
+        self.guild = discord.Object(id=1020239029452677180)
 
     async def load_extensions(self):
         for command in self.tree.get_commands():
             await self.unload_extension(command.name)
 
-        for filename in os.listdir("sigmou/cogs"):
+        for filename in os.listdir("sigmou/commands"):
             if not filename.endswith(".py") or filename.startswith("_"):
                 continue
 
-            print(f"=> sigmou.cogs.{filename}")
-            await self.load_extension(f"sigmou.cogs.{filename[:-3]}")
+            print(f"=> sigmou.commands.{filename}")
+            await self.load_extension(f"sigmou.commands.{filename[:-3]}")
 
-        await self.tree.sync()
+        await self.tree.sync(guild=self.guild)
 
     def run(self, **kwargs):
         token = dotenv.dotenv_values(".env").get("TOKEN")

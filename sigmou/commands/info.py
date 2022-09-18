@@ -4,7 +4,7 @@ from os import listdir
 from typing import TYPE_CHECKING, Dict, Tuple
 
 import psutil
-from discord import app_commands, Interaction, Embed, TextChannel
+from discord import app_commands, Interaction, Embed
 from discord.ext import commands
 
 if TYPE_CHECKING:
@@ -17,7 +17,7 @@ class InfoCommandsGroup(app_commands.Group, name="info"):
         super().__init__()
 
         self.files_info: Dict[str, str] = {}
-        folders: Tuple[str, ...] = (".", "sigmou", "sigmou/cogs")
+        folders: Tuple[str, ...] = (".", "sigmou", "sigmou/commands")
 
         for file, path in {
             _f: path
