@@ -104,7 +104,3 @@ class InfoCommandsGroup(app_commands.Group, name="info"):
                 ),
             )
         )
-
-
-async def setup(client: commands.Bot):
-    client.tree.add_command(InfoCommandsGroup())

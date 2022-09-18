@@ -12,4 +12,4 @@ async def on_ready(client):
     logger.info(f"Logged In as {client.user.name} after {ready_time:,.3f}s")
 
     await db.init()
-    await client.load_extensions()
+    await client.load_command_groups()

@@ -7,6 +7,7 @@ from discord.ext import commands
 
 from sigmou.events import events
 from sigmou.injection import client_injection
+from sigmou.commands import groups
 
 logger = getLogger(__name__)
 
@@ -17,18 +18,13 @@ class Bot(commands.Bot):
         super(Bot, self).__init__(intents=Intents.all(), command_prefix=';')
         self.remove_command("help")
 
-    async def load_extensions(self):
+    async def load_command_groups(self):
         for command in self.tree.get_commands():
             await self.unload_extension(command.name)
 
-        for filename in os.listdir("sigmou/commands"):
-            if not filename.endswith(".py") or filename.startswith("_"):
-                continue
+        for group_cls in groups:
+            self.tree.add_command(group_cls())
 
-            print(f"=> sigmou.commands.{filename}")
-            await self.load_extension(f"sigmou.commands.{filename[:-3]}")
-
-        print("Syncing tree...")
         await self.tree.sync()
 
     def run(self, **kwargs):

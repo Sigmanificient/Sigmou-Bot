@@ -51,7 +51,3 @@ class TimeCommandsGroup(app_commands.Group, name="time"):
         await interaction.response.send_message(
             f"`{t:,.3f}s`" if t else "You dont have any timer"
         )
-
-
-async def setup(client: commands.Bot):
-    client.tree.add_command(TimeCommandsGroup())

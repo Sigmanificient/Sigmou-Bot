@@ -12,7 +12,7 @@ from sigmou.utils.db_wrapper import db
 
 
 @app_commands.guild_only()
-class GameCommandsGroup(app_commands.Group, name="level"):
+class LevelCommandsGroup(app_commands.Group, name="level"):
 
     @app_commands.command(name="profile")
     async def profile_command(
@@ -59,7 +59,3 @@ class GameCommandsGroup(app_commands.Group, name="level"):
                 )
             )
         )
-
-
-async def setup(client: commands.Bot):
-    client.tree.add_command(GameCommandsGroup())

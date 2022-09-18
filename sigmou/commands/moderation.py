@@ -20,7 +20,3 @@ class ModerationCommandsGroup(app_commands.Group, name="mod"):
 
         deleted = await channel.purge(limit=limit or float('inf'))
         await channel.send(f'> Deleted `{len(deleted)}` message(s)')
-
-
-async def setup(client: commands.Bot):
-    client.tree.add_command(ModerationCommandsGroup())
