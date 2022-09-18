@@ -9,6 +9,7 @@ all: $(VENV)/$(CMD)
 
 $(VENV)/$(CMD): $(V_BIN)/python
 	$(V_BIN)/pip install -e .
+	cp .env.example .env
 
 
 $(V_BIN)/python:
