@@ -2,19 +2,21 @@ import os
 from typing import Optional, Any, Iterable
 
 import aiosqlite
+from logging import getLogger
 
-from sigmou.utils.logging import log
+
+logger = getLogger(__name__)
 
 DB_PATH: str = "sigmou/db/.db"
 
 
 def log_it(method):
     async def wrapper(self, sql, *args):
-        log.db(f'{method.__name__} with `{sql}` ?= {args}')
+        logger.info(f'{method.__name__} with `{sql}` ?= {args}')
         result = await method(self, sql, *args)
 
         if result:
-            log.db(f'Query returned {result}')
+            logger.info(f'Query returned {result}')
             return result
 
     return wrapper
@@ -27,11 +29,11 @@ class Database:
     @classmethod
     async def init(cls) -> bool:
         if not os.path.exists(DB_PATH):
-            log.error("DB not found !")
+            logger.error("DB not found !")
             return False
 
         cls.__db = await aiosqlite.connect(DB_PATH)
-        log.success("Connection to the sqlite database is established")
+        logger.info("Connection to the sqlite database is established")
         return True
 
     @log_it

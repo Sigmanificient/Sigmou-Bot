@@ -1,11 +1,15 @@
+from __future__ import annotations
+
 from os import listdir
-from typing import Dict, Tuple
+from typing import Dict, Tuple, TYPE_CHECKING
 
 import psutil
 from pincer import command
 from pincer.objects import Embed
 
-from sigmou.bot import Bot
+if TYPE_CHECKING:
+    from sigmou.bot import Bot
+
 from sigmou.constants import TEST_GUILD_ID
 
 
@@ -31,12 +35,12 @@ class InfoCog:
         self.files_info['Total'] = "\n".join(self.files_info.values())
 
     @command(name="code_stats", guild=TEST_GUILD_ID)
-    async def code_command(self) -> Embed:
+    async def code_command(self: Bot) -> Embed:
         return Embed(
             title="Code Structure",
             description=(
                 "> This is the whole code structure of "
-                f"{self.client.bot.username}!"
+                f"{self.client.username}!"
             )
         ).add_fields(
             self.files_info,

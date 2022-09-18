@@ -1,7 +1,13 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from pincer import command
 from pincer.objects import Embed, User
 
-from sigmou.bot import Bot
+if TYPE_CHECKING:
+    from sigmou.bot import Bot
+
 from sigmou.constants import TEST_GUILD_ID
 from sigmou.utils.db_wrapper import db
 

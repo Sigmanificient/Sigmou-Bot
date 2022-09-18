@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 import asyncio
-from typing import Union
+from typing import Union, TYPE_CHECKING
 
 from pincer import command
 
-from sigmou.bot import Bot
+if TYPE_CHECKING:
+    from sigmou.bot import Bot
+
 from sigmou.constants import TEST_GUILD_ID
 from sigmou.utils.timer import time
 
