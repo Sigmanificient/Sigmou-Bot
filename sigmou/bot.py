@@ -1,16 +1,12 @@
 import os
 from logging import getLogger
-from typing import Dict
 
-import discord
 import dotenv
 from discord import Intents
 from discord.ext import commands
 
 from sigmou.events import events
 from sigmou.injection import client_injection
-from sigmou.utils.db_wrapper import db
-from sigmou.utils.timer import time
 
 logger = getLogger(__name__)
 
@@ -19,11 +15,7 @@ class Bot(commands.Bot):
     def __init__(self):
         """Sigmanificient Bot wrapper."""
         super(Bot, self).__init__(intents=Intents.all(), command_prefix=';')
-
-        self.__cogs: Dict[str, object] = {}
         self.remove_command("help")
-
-        self.guild = discord.Object(id=1020239029452677180)
 
     async def load_extensions(self):
         for command in self.tree.get_commands():
@@ -36,7 +28,8 @@ class Bot(commands.Bot):
             print(f"=> sigmou.commands.{filename}")
             await self.load_extension(f"sigmou.commands.{filename[:-3]}")
 
-        await self.tree.sync(guild=self.guild)
+        print("Syncing tree...")
+        await self.tree.sync()
 
     def run(self, **kwargs):
         token = dotenv.dotenv_values(".env").get("TOKEN")
@@ -46,3 +39,9 @@ class Bot(commands.Bot):
             return
 
         super().run(token=token, **kwargs)
+
+    def setup_events(self):
+        injector = client_injection(self)
+
+        for event in events:
+            self.event(injector(event))

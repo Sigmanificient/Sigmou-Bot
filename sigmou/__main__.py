@@ -9,7 +9,9 @@ logging.basicConfig(level=logging.DEBUG)
 
 def main():
     time("start", keep=True)
-    bot: Bot = Bot()
+
+    bot = Bot()
+    bot.setup_events()
     bot.run()
 
 
