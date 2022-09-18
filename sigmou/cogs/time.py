@@ -3,64 +3,66 @@ from __future__ import annotations
 import asyncio
 from typing import TYPE_CHECKING, Union
 
-from pincer import command
+from discord import app_commands, Interaction
+from discord.ext import commands
 
 if TYPE_CHECKING:
     from sigmou.bot import Bot
 
-from sigmou.constants import TEST_GUILD_ID
 from sigmou.utils.timer import time
 
 
-class OtherCog:
-    """Gizmos and Gadget i dont know where to put."""
+@app_commands.guild_only()
+class TimeCommandsGroup(app_commands.Group, name="time"):
 
-    def __init__(self, client: Bot):
-        """Link to bot instance."""
-        self.client: Bot = client
-
-    @command(
+    @app_commands.command(
         name="chronometer",
         description=(
             "A simple chronometer commands that start on first call, "
             "then give time elapsed. "
-        ),
-        guild=TEST_GUILD_ID,
+        )
     )
-    async def chronometer_command(self, ctx) -> str:
+    async def chronometer_command(self, interaction: Interaction) -> str:
         """Clear the number of messages asked.
         If no number is given, clear all message in the channel."""
 
-        t: Union[str, float] = time(ctx.author.user.id)
+        t: Union[str, float] = time(interaction.user.id)
 
-        if isinstance(t, float):
-            return f"Timer ended: `{t:,.3f}s`"
+        await interaction.response.send_message(
+            f"Timer ended: `{t:,.3f}s`"
+            if isinstance(t, float)
+            else "Timer started..."
+        )
 
-        return "Timer started..."
-
-    @command(
+    @app_commands.command(
         name="lap",
         description=(
             "A command that give the current chronometer time of an user "
             "without stopping it. "
-        ),
-        guild=TEST_GUILD_ID,
+        )
     )
-    async def lap_command(self, ctx) -> str:
+    async def lap_command(self, interaction: Interaction) -> str:
         """give the current time of a timer without destroying it."""
-        t: Union[bool, float] = time(ctx.author.user.id, keep=True, create=False)
-        return f"`{t:,.3f}s`" if t else "You dont have any timer"
+        t: Union[bool, float] = time(
+            interaction.user.id,
+            keep=True,
+            create=False
+        )
 
-    @command(
+        await interaction.response.send_message(
+            f"`{t:,.3f}s`" if t else "You dont have any timer"
+        )
+
+    @app_commands.command(
         name="timer",
-        description="A command that wait the given time then ping the user.",
-        guild=TEST_GUILD_ID,
+        description="A command that wait the given time then ping the user."
     )
-    async def timer_command(self, seconds: int) -> str:
+    async def timer_command(self, interaction):
         """A simple timer that ping you at end"""
-        yield "started..."
-        await asyncio.sleep(seconds)
-        yield "> Ended"
+        await interaction.response.send_message("started...")
+        await asyncio.sleep(interaction.time)
+        await interaction.response.send_message("> Ended!")
 
 
-setup = OtherCog
+async def setup(client: commands.Bot):
+    client.tree.add_command(TimeCommandsGroup())

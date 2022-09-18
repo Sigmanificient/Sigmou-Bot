@@ -4,52 +4,55 @@ from os import listdir
 from typing import TYPE_CHECKING, Dict, Tuple
 
 import psutil
-from pincer import command
-from pincer.objects import Embed
+from discord import app_commands, Interaction, Embed, TextChannel
+from discord.ext import commands
 
 if TYPE_CHECKING:
     from sigmou.bot import Bot
 
-from sigmou.constants import TEST_GUILD_ID
 
+@app_commands.guild_only()
+class InfoCommandsGroup(app_commands.Group, name="info"):
+    def __init__(self):
+        super().__init__()
 
-class InfoCog:
-    """A simple commands cog template."""
-
-    def __init__(self, client: Bot):
-        """Link to bot instance."""
-        self.client: Bot = client
-
-        # Preloading file content
         self.files_info: Dict[str, str] = {}
-
         folders: Tuple[str, ...] = (".", "sigmou", "sigmou/cogs")
 
         for file, path in {
-            _f: path for path in folders for _f in listdir(path) if _f.endswith(".py")
+            _f: path
+            for path in folders
+            for _f in listdir(path)
+            if _f.endswith(".py")
         }.items():
             with open(f"{path}/{file}", encoding="utf-8") as f:
-                self.files_info[file] = f.read()
+                self.files_info[file.replace('_', r'\_')] = f.read()
 
         self.files_info["Total"] = "\n".join(self.files_info.values())
 
-    @command(name="code_stats", guild=TEST_GUILD_ID)
-    async def code_command(self: Bot) -> Embed:
-        return Embed(
+    @app_commands.command(name="code")
+    async def code_command(self, interaction: Interaction):
+        embed = Embed(
             title="Code Structure",
             description=(
-                "> This is the whole code structure of " f"{self.client.username}!"
-            ),
-        ).add_fields(
-            self.files_info,
-            map_title=lambda name: (f"📝 {name}" if name != "Total" else "📊 Total"),
-            map_values=lambda file: (
-                f"`{len(file)}` characters" f"\n `{len(file.splitlines())}` lines"
+                "> This is the whole code structure of "
+                f"{interaction.client.user.name}!"
             ),
         )
 
-    @command(name="panel", guild=TEST_GUILD_ID)
-    async def panel_stats(self) -> Embed:
+        for file, lines in self.files_info.items():
+            embed.add_field(
+                name=f"📝 {file}" if file != "Total" else "📊 Total",
+                value=(
+                    f"`{len(lines)}` characters"
+                    f"\n `{len(lines.splitlines())}` lines"
+                )
+            )
+
+        await interaction.response.send_message(embed=embed)
+
+    @app_commands.command(name="panel")
+    async def panel_stats(self, interaction: Interaction):
         mb: int = 1024**2
 
         vm = psutil.virtual_memory()
@@ -58,42 +61,50 @@ class InfoCog:
         disk = psutil.disk_usage(".")
 
         stats = {
-            "ram": (100 * (vm.used / vm.total), f"{(vm.total / mb) / 1000:,.3f}", "Gb"),
+            "ram": (
+                100 * (vm.used / vm.total),
+                f"{(vm.total / mb) / 1000:,.3f}", "Gb"
+            ),
             "cpu": (
                 cpu_percent,
                 f"{cpu_freq.current / 1000:.1f}`/`{cpu_freq.max / 1000:.1f}",
                 "Ghz",
             ),
-            "disk": (100 * (disk.used / disk.total), f"{disk.total / mb:,.0f}", "Mb"),
+            "disk": (
+                100 * (disk.used / disk.total),
+                f"{disk.total / mb:,.0f}", "Mb"
+            ),
         }
 
-        return Embed(
-            title="Server Report", description="The bot is hosted on a private vps."
-        ).add_fields(
-            stats.items(),
-            map_title=lambda name: name.upper(),
-            map_values=lambda percent, info, unit: (
-                f"> `{percent:.3f}` **%**\n- `{info}` **{unit}**"
-            ),
+        embed = Embed(
+            title="Server Report",
+            description="The bot is hosted on a private vps."
         )
 
-    @command(
-        name="invite",
-        guild=TEST_GUILD_ID
-        # aliases=("inv", "i"),
-        # brief="A link to invite the bot"
-    )
-    async def invite(self) -> Embed:
-        """Command to get bot invitation link."""
-        return Embed(
-            title="Invite the Bot !",
-            description=(
-                "> Click this link to invite this bot on your servers !\n"
-                "You need to have the required permissions on the server.\n"
-                "[invite me now](https://discord.com/api/oauth2/authorize"
-                f"?client_id={self.client.bot}&permissions=8&scope=bot)"
-            ),
+        for name, (percent, info, unit) in stats.items():
+            embed.add_field(
+                name=name.upper(),
+                value=f"> `{percent:.3f}` **%**\n- `{info}` **{unit}**"
+            )
+
+        await interaction.response.send_message(embed=embed)
+
+    @app_commands.command(name="invite")
+    async def invite(self, interaction: Interaction):
+        uid = interaction.client.user.id
+        await interaction.response.send_message(
+            embed=Embed(
+                title="Invite the Bot !",
+                description=(
+                    "> Click this link to invite this bot on your servers !\n"
+                    "You need to have the required permissions on the server.\n"
+                    "[invite me now](https://discord.com/api/oauth2/authorize"
+                    f"?client_id={uid}&scope=bot%20applications.commands"
+                    "&permissions=8)"
+                ),
+            )
         )
 
 
-setup = InfoCog
+async def setup(client: commands.Bot):
+    client.tree.add_command(InfoCommandsGroup())

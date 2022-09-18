@@ -6,7 +6,6 @@ import dotenv
 from discord import Intents
 from discord.ext import commands
 
-from sigmou.cogs import cogs
 from sigmou.utils.db_wrapper import db
 from sigmou.utils.timer import time
 
