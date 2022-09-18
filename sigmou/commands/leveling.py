@@ -12,35 +12,7 @@ from sigmou.utils.db_wrapper import db
 
 
 @app_commands.guild_only()
-class GameCommandsGroup(app_commands.Group, name="game"):
-
-    @app_commands.command(name="start")
-    async def start_command(self, interaction: Interaction):
-        user = await db.fetchone(
-            "select true from users where discord_id = ?",
-            interaction.user.id
-        )
-
-        if user:
-            await interaction.response.send_message(
-                embed=Embed(
-                    title="Error",
-                    description="You already have an account !"
-                )
-            )
-            return
-
-        await db.post(
-            "insert into users(discord_id) values (?)",
-            interaction.user.id
-        )
-
-        await interaction.response.send_message(
-            embed=Embed(
-                title="Welcome !",
-                description="Your account has just been created !"
-            )
-        )
+class GameCommandsGroup(app_commands.Group, name="level"):
 
     @app_commands.command(name="profile")
     async def profile_command(
