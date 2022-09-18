@@ -1,11 +1,16 @@
 import logging
 
-from sigmou.bot import Bot
+from . import Bot
 from sigmou.utils.timer import time
 
 logging.basicConfig(level=logging.DEBUG)
 
-if __name__ == '__main__':
+
+def main():
     time("start", keep=True)
     bot: Bot = Bot(prefix='=')
     bot.run()
+
+
+if __name__ == '__main__':
+    main()
