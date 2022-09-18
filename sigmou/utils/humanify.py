@@ -1,41 +1,31 @@
-from typing import Dict, List, Union
+def format_duration(seconds: int) -> str:
+    if not seconds:
+        return "now"
 
-second_units: Dict[str, int] = {"s": 60, "m": 60, "h": 24, "d": 365}
-sub_second_unit: Dict[str, float] = {"ms": 1e-03, "µs": 1e-06, "ns": 1e-09}
+    dvr = []
+    r = seconds
+    for k in (60, 60, 24, 365):
+        r, v = divmod(r, k)
+        dvr.append(v)
 
+    y, (d, h, m, s) = r, dvr[::-1]
 
-def pretty_time(time: Union[int, float]) -> str:
-    """Format time to a human readable string."""
-    if not time:
-        return "0s"
+    display = [
+        (v, unit)
+        for v, unit in zip(
+            (y, d, h, m, s),
+            ("year", "day", "hour", "minute", "second")
+        )
+        if v
+    ]
 
-    display_units: List[str] = []
+    last, last_unit = display.pop()
+    suffix = f"{last} {last_unit}{'s' * (last > 1)}"
 
-    for unit, equal in second_units.items():
-        time, n = divmod(time, equal)
+    if not display:
+        return suffix
 
-        if n:
-            display_units.append(f"`{n:.0f}`{unit}")
-
-        if not time:
-            break
-
-    else:
-        display_units.append(f"`{time}`y")
-
-    if len(display_units) == 1:
-        return display_units[0]
-
-    display_units = display_units[::-1]
-    end = display_units.pop()
-
-    return ", ".join(display_units) + f" and {end}"
-
-
-def pretty_time_small(seconds: Union[int, float]) -> str:
-    """Format a sub second time to a human readable string."""
-    for unit, eq in sub_second_unit.items():
-        if eq < seconds:
-            return f"{seconds / eq:,.2f}{unit}"
-
-    return "0s"
+    return ", ".join(
+        f'{v} {d}{"s" * (v > 1)}'
+        for v, d in display
+    ) + " and " + suffix
