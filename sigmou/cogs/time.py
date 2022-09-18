@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 from pincer import command
 
@@ -22,10 +22,10 @@ class OtherCog:
     @command(
         name="chronometer",
         description=(
-                "A simple chronometer commands that start on first call, "
-                "then give time elapsed. "
+            "A simple chronometer commands that start on first call, "
+            "then give time elapsed. "
         ),
-        guild=TEST_GUILD_ID
+        guild=TEST_GUILD_ID,
     )
     async def chronometer_command(self, ctx) -> str:
         """Clear the number of messages asked.
@@ -41,10 +41,10 @@ class OtherCog:
     @command(
         name="lap",
         description=(
-                "A command that give the current chronometer time of an user "
-                "without stopping it. "
+            "A command that give the current chronometer time of an user "
+            "without stopping it. "
         ),
-        guild=TEST_GUILD_ID
+        guild=TEST_GUILD_ID,
     )
     async def lap_command(self, ctx) -> str:
         """give the current time of a timer without destroying it."""
@@ -54,7 +54,7 @@ class OtherCog:
     @command(
         name="timer",
         description="A command that wait the given time then ping the user.",
-        guild=TEST_GUILD_ID
+        guild=TEST_GUILD_ID,
     )
     async def timer_command(self, seconds: int) -> str:
         """A simple timer that ping you at end"""

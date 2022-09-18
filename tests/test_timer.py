@@ -1,15 +1,14 @@
+import unittest
 from time import sleep
 from typing import List
 
 from sigmou.utils.timer import time
-import unittest
 
 FIXED_SIZE: int = 1_000_000
 MAX_GAP: float = 0.01
 
 
 class MyTestCase(unittest.TestCase):
-
     def test_duplicates(self):
         chronos: List[int] = [time() for _ in range(FIXED_SIZE)]
         self.assertEqual(len(set(chronos)), FIXED_SIZE)
@@ -31,5 +30,5 @@ class MyTestCase(unittest.TestCase):
         self.assertLessEqual(times[-1] - times[0], MAX_GAP)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

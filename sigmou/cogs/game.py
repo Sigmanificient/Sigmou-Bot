@@ -14,6 +14,7 @@ from sigmou.utils.db_wrapper import db
 
 class GameCog:
     """Game commands."""
+
     def __init__(self, client: Bot):
         """Link to bot instance."""
         self.client: Bot = client
@@ -25,16 +26,12 @@ class GameCog:
         )
 
         if user:
-            return Embed(
-                title="Error",
-                description="You already have an account !"
-            )
+            return Embed(title="Error", description="You already have an account !")
 
         await db.post("insert into users(discord_id) values (?)", ctx.author.user.id)
 
         return Embed(
-            title="Welcome !",
-            description="Your account has just been created !"
+            title="Welcome !", description="Your account has just been created !"
         )
 
     @command(name="daily", cooldown=1, cooldown_scale=84600, guild=TEST_GUILD_ID)
@@ -44,14 +41,11 @@ class GameCog:
         )
 
         if not user:
-            return Embed(
-                title="Error",
-                description="You dont have an account !"
-            )
+            return Embed(title="Error", description="You dont have an account !")
 
         await db.post(
             "UPDATE users SET point = point + 100 WHERE discord_id = ?",
-            ctx.author.user.id
+            ctx.author.user.id,
         )
 
         return "You received your daily points, enjoy !"
@@ -71,7 +65,7 @@ class GameCog:
                 description=(
                     f"{'You' if user.id == ctx.author.user.id else user} "
                     "dont have an account !"
-                )
+                ),
             )
 
         point = await db.fetchone(
@@ -95,9 +89,7 @@ class GameCog:
             )
         ]
 
-        return '\n'.join(
-            users
-        )
+        return "\n".join(users)
 
 
 setup = GameCog
