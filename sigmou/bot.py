@@ -1,5 +1,6 @@
 import os
 from logging import getLogger
+from time import perf_counter
 
 import dotenv
 from discord import Intents
@@ -17,6 +18,7 @@ class Bot(commands.Bot):
         """Sigmanificient Bot wrapper."""
         super(Bot, self).__init__(intents=Intents.all(), command_prefix=';')
         self.remove_command("help")
+        self.init_marker = perf_counter()
 
     async def load_command_groups(self):
         for command in self.tree.get_commands():
