@@ -5,12 +5,8 @@
 __pycache__
 .env
 
-# Bot
-dev.py
-
 # Coverage results
 .coverage
 
 # Packaging
 *.egg-info
-
